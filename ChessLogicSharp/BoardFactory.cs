@@ -5,11 +5,65 @@ namespace ChessLogicSharp
 {
      public static class BoardFactory
         {
-            public static Board CreateDefaultBoard()
+            public static Board CreateBoard()
             {
                 BoardPiece[,] boardPieces = new BoardPiece[Board.BOARD_DIMENSIONS, Board.BOARD_DIMENSIONS];
                 CreateP1Set(boardPieces);
                 CreateP2Set(boardPieces);
+                return new Board {BoardPieces = boardPieces, PlayerTurn = Player.PlayerOne, Actions = new Stack<BoardAction>()};
+            }
+
+            public static Board CreateBoard(char [,] board)
+            {
+                BoardPiece[,] boardPieces = new BoardPiece[Board.BOARD_DIMENSIONS, Board.BOARD_DIMENSIONS];
+                for (int x = 0; x < Board.BOARD_DIMENSIONS; x++)
+                {
+                    for (int y = 0; y < Board.BOARD_DIMENSIONS; y++)
+                    {
+                        switch (board[x, y])
+                        {
+                            case 'b':
+                                boardPieces[x, y] = new BoardPiece {PieceType = PieceType.Bishop, PieceOwner = Player.PlayerOne};
+                                break;
+                            case 'B':
+                                boardPieces[x, y] = new BoardPiece {PieceType = PieceType.Bishop, PieceOwner = Player.PlayerTwo};
+                                break;
+                            case 'c':
+                                boardPieces[x, y] = new BoardPiece {PieceType = PieceType.Castle, PieceOwner = Player.PlayerOne};
+                                break;
+                            case 'C':
+                                boardPieces[x, y] = new BoardPiece {PieceType = PieceType.Castle, PieceOwner = Player.PlayerTwo};
+                                break;
+                            case 'n':
+                                boardPieces[x, y] = new BoardPiece {PieceType = PieceType.Knight, PieceOwner = Player.PlayerOne};
+                                break;
+                            case 'N':
+                                boardPieces[x, y] = new BoardPiece {PieceType = PieceType.Knight, PieceOwner = Player.PlayerTwo};
+                                break;
+                            case 'k':
+                                boardPieces[x, y] = new BoardPiece {PieceType = PieceType.King, PieceOwner = Player.PlayerOne};
+                                break;
+                            case 'K':
+                                boardPieces[x, y] = new BoardPiece {PieceType = PieceType.King, PieceOwner = Player.PlayerTwo};
+                                break;
+                            case 'q':
+                                boardPieces[x, y] = new BoardPiece {PieceType = PieceType.Queen, PieceOwner = Player.PlayerOne};
+                                break;
+                            case 'Q':
+                                boardPieces[x, y] = new BoardPiece {PieceType = PieceType.Queen, PieceOwner = Player.PlayerTwo};
+                                break;
+                            case 'p':
+                                boardPieces[x, y] = new BoardPiece {PieceType = PieceType.Pawn, PieceOwner = Player.PlayerOne};
+                                break;
+                            case 'P':
+                                boardPieces[x, y] = new BoardPiece {PieceType = PieceType.Pawn, PieceOwner = Player.PlayerTwo};
+                                break;
+                            default:
+                                boardPieces[x, y] = new BoardPiece {PieceType = PieceType.None, PieceOwner = Player.None};
+                                break;
+                        }
+                    }
+                }
                 return new Board {BoardPieces = boardPieces, PlayerTurn = Player.PlayerOne, Actions = new Stack<BoardAction>()};
             }
     

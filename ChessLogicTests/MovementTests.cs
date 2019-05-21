@@ -1,10 +1,21 @@
+using ChessLogicSharp;
 using NUnit.Framework;
 
 namespace ChessLogicTests
 {
-    [TestFixture]
     public class MovementTests
     {
+        [Test]
+        public void TurnSwapTest()
+        {
+            
+        }
         
+        [Test]
+        public void InvalidMovePieceTest()
+        {
+            Board board = BoardFactory.CreateBoard();
+            
+        }
     }
 }

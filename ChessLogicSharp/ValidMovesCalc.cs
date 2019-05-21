@@ -416,9 +416,17 @@ namespace ChessLogicSharp
             return false;
         }
         
-        public static bool IsMoveValid(BoardPieceMove moveToCheck, Player player, BoardPiece[,] board)
+        public static bool IsMoveValid(BoardPieceMove moveToCheck, Player player, Board board)
         {
-            BoardPiece[,] tempBoard = BoardHelpers.DuplicateBoard(board);
+            var moves = new HashSet<BoardPieceMove>();
+            GetValidMovesForPlayer(board, player, moves);
+
+            if (!moves.Contains(moveToCheck))
+            {
+                return false;
+            }
+            
+            BoardPiece[,] tempBoard = BoardHelpers.DuplicateBoard(board.BoardPieces);
 
             if (moveToCheck.To.x >= 0 && moveToCheck.To.x < Board.BOARD_DIMENSIONS &&
                 moveToCheck.To.y >= 0 && moveToCheck.To.y < Board.BOARD_DIMENSIONS)

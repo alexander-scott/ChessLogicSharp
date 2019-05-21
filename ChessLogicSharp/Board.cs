@@ -32,7 +32,7 @@ namespace ChessLogicSharp
         {
             // Check the moving piece belongs to the correct player and is a valid move
             if (BoardPieces[move.From.x, move.From.y].PieceOwner != PlayerTurn ||
-                !ValidMovesCalc.IsMoveValid(move, PlayerTurn, BoardPieces) || GameOver)
+                !ValidMovesCalc.IsMoveValid(move, PlayerTurn, this) || GameOver)
             {
                 // Move is invalid
                 return;

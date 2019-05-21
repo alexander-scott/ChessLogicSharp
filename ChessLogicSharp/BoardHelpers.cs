@@ -31,12 +31,12 @@ namespace ChessLogicSharp
         {
             if (playerNum == Player.PlayerOne)
             {
-                return -1;
+                return 1;
             }
-
+            
             if (playerNum == Player.PlayerTwo)
             {
-                return 1;
+                return -1;
             }
 
             throw new Exception();
@@ -66,21 +66,21 @@ namespace ChessLogicSharp
         {
             switch (pos)
             {
-                case 7:
-                    return "a";
-                case 6:
-                    return "b";
-                case 5:
-                    return "c";
-                case 4:
-                    return "d";
-                case 3:
-                    return "e";
-                case 2:
-                    return "f";
-                case 1:
-                    return "g";
                 case 0:
+                    return "a";
+                case 1:
+                    return "b";
+                case 2:
+                    return "c";
+                case 3:
+                    return "d";
+                case 4:
+                    return "e";
+                case 5:
+                    return "f";
+                case 6:
+                    return "g";
+                case 7:
                     return "h";
             }
 
@@ -89,7 +89,7 @@ namespace ChessLogicSharp
 
         private static string YPosToLetter(int pos)
         {
-            return ((8 - pos)).ToString();
+            return (1 + pos).ToString();
         }
         
         private static int LetterToXPos(char letter)
@@ -97,21 +97,21 @@ namespace ChessLogicSharp
             switch (letter)
             {
                 case 'a':
-                    return 7;
-                case 'b':
-                    return 6;
-                case 'c':
-                    return 5;
-                case 'd':
-                    return 4;
-                case 'e':
-                    return 3;
-                case 'f':
-                    return 2;
-                case 'g':
-                    return 1;
-                case 'h':
                     return 0;
+                case 'b':
+                    return 1;
+                case 'c':
+                    return 2;
+                case 'd':
+                    return 3;
+                case 'e':
+                    return 4;
+                case 'f':
+                    return 5;
+                case 'g':
+                    return 6;
+                case 'h':
+                    return 7;
             }
 
             throw new Exception();
@@ -119,7 +119,7 @@ namespace ChessLogicSharp
 
         private static int LetterToYPos(char pos)
         {
-            return (int)(pos) + 8;
+            return pos - 1;
         }
 
         public static bool ValidMoveRepresentation(string move)
@@ -183,8 +183,7 @@ namespace ChessLogicSharp
 
         private static bool ValidYPos(char pos)
         {
-            int intRep;
-            if (!int.TryParse(pos.ToString(), out intRep))
+            if (!int.TryParse(pos.ToString(), out var intRep))
             {
                 return false;
             }

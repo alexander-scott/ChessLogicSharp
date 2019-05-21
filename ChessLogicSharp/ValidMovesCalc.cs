@@ -484,8 +484,8 @@ namespace ChessLogicSharp
             }
 
             // Double step FORWARD.
-            if ((boardPiece.PieceOwner == Player.PlayerOne && piecePosition.y == 6) ||
-                (boardPiece.PieceOwner == Player.PlayerTwo && piecePosition.y == 1))
+            if ((boardPiece.PieceOwner == Player.PlayerOne && piecePosition.y == 1) ||
+                (boardPiece.PieceOwner == Player.PlayerTwo && piecePosition.y == 6))
             {
                 //Reset the board.
                 tempBoard = BoardHelpers.DuplicateBoard(board);
@@ -506,8 +506,8 @@ namespace ChessLogicSharp
             }
 
             // En'Passant move.
-            if (piecePosition.y == 3 && boardPiece.PieceOwner == Player.PlayerOne ||
-                piecePosition.y == 4 && boardPiece.PieceOwner == Player.PlayerTwo)
+            if (piecePosition.y == 4 && boardPiece.PieceOwner == Player.PlayerOne ||
+                piecePosition.y == 3 && boardPiece.PieceOwner == Player.PlayerTwo)
             {
                 // Pawn beside us, can we en'passant.
                 xPos = piecePosition.x - 1;

@@ -15,7 +15,7 @@ namespace ChessLogicSharp
     
             private static void CreateP1Set(BoardPiece[,] boardPieces)
             {
-                int yPos = 7;
+                int yPos = 0;
     
                 // Create castles
                 var pawnData = new BoardPiece {PieceType = PieceType.Pawn, PieceOwner = Player.PlayerOne};
@@ -37,7 +37,7 @@ namespace ChessLogicSharp
                 boardPieces[3, yPos] = queenData;
                 boardPieces[4, yPos] = kingData;
     
-                yPos = 6;
+                yPos = 1;
                 // Create Pawns
                 for (int xPos = 0; xPos < Board.BOARD_DIMENSIONS; xPos++)
                 {
@@ -47,7 +47,7 @@ namespace ChessLogicSharp
     
             private static void CreateP2Set(BoardPiece[,] boardPieces)
             {
-                int yPos = 0;
+                int yPos = 7;
     
                 // Create castles
                 var pawnData = new BoardPiece {PieceType = PieceType.Pawn, PieceOwner = Player.PlayerTwo};
@@ -69,7 +69,7 @@ namespace ChessLogicSharp
                 boardPieces[3, yPos] = queenData;
                 boardPieces[4, yPos] = kingData;
     
-                yPos = 1;
+                yPos = 6;
                 // Create Pawns
                 for (int xPos = 0; xPos < Board.BOARD_DIMENSIONS; xPos++)
                 {

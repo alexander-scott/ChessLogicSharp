@@ -119,7 +119,7 @@ namespace ChessLogicSharp
 
         private static int LetterToYPos(char pos)
         {
-            return pos - 1;
+            return int.Parse(pos.ToString()) - 1;
         }
 
         public static bool ValidMoveRepresentation(string move)

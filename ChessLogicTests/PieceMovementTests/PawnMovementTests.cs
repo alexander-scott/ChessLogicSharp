@@ -102,35 +102,38 @@ namespace ChessLogicTests.PieceMovementTests
             Assert.IsTrue(board.BoardPieces[pawnPos.x, pawnPos.y].PieceType == PieceType.Pawn);
             Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.None);
         }
-
+        
+        /// <summary>
+        /// Test the pawn can't move backwards
+        /// </summary>
         [Test]
-        public void PieceTakenTest()
+        public void PawnInvalidMovePieceTest3()
         {
             char[,] boardLayout =
             {
                 {'C', 'N', 'B', 'Q', 'K', 'B', 'N', 'C'},
-                {'P', 'P', 'P', 'P', 'e', 'P', 'P', 'P'},
+                {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
                 {'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'},
-                {'e', 'e', 'e', 'e', 'P', 'e', 'e', 'e'},
-                {'e', 'e', 'e', 'p', 'e', 'e', 'e', 'e'}, // Pawn take pawn
+                {'e', 'e', 'e', 'p', 'e', 'e', 'e', 'e'},
                 {'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'},
+                {'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'}, // Pawn has already moved
                 {'p', 'p', 'p', 'e', 'p', 'p', 'p', 'p'},
                 {'c', 'n', 'b', 'q', 'k', 'b', 'n', 'c'}
             };
             boardLayout = boardLayout.RotateArray();
 
             Board board = BoardFactory.CreateBoard(boardLayout);
-            var pawnPos = new Vector2I(3, 3);
-            Assert.IsTrue(board.BoardPieces[pawnPos.x, pawnPos.y].PieceType == PieceType.Pawn && board.BoardPieces[pawnPos.x, pawnPos.y].PieceOwner == Player.PlayerOne);
+            var pawnPos = new Vector2I(3, 4);
+            Assert.IsTrue(board.BoardPieces[pawnPos.x, pawnPos.y].PieceType == PieceType.Pawn);
 
-            var pawnDest = new Vector2I(4, 4);
-            Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.Pawn && board.BoardPieces[pawnDest.x, pawnDest.y].PieceOwner == Player.PlayerTwo);
+            var pawnDest = new Vector2I(3, 3);
+            Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.None);
 
             var move = new BoardPieceMove(pawnPos, pawnDest);
             board.ApplyMove(move);
 
-            Assert.IsTrue(board.BoardPieces[pawnPos.x, pawnPos.y].PieceType == PieceType.None);
-            Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.Pawn && board.BoardPieces[pawnDest.x, pawnDest.y].PieceOwner == Player.PlayerOne);
+            Assert.IsTrue(board.BoardPieces[pawnPos.x, pawnPos.y].PieceType == PieceType.Pawn);
+            Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.None);
         }
 
         [Test]
@@ -141,8 +144,8 @@ namespace ChessLogicTests.PieceMovementTests
                 {'C', 'N', 'B', 'Q', 'K', 'B', 'N', 'C'},
                 {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
                 {'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'},
-                {'e', 'e', 'e', 'p', 'e', 'e', 'e', 'e'},
-                {'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'}, // Pawn take pawn
+                {'e', 'e', 'e', 'p', 'e', 'e', 'e', 'e'}, // Pawn take pawn
+                {'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'}, 
                 {'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'},
                 {'p', 'p', 'p', 'e', 'p', 'p', 'p', 'p'},
                 {'c', 'n', 'b', 'q', 'k', 'b', 'n', 'c'}

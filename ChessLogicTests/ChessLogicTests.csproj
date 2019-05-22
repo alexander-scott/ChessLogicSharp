@@ -45,7 +45,12 @@
     <Compile Include="ActionLogTests.cs" />
     <Compile Include="CreationTests.cs" />
     <Compile Include="MovementTests.cs" />
+    <Compile Include="PieceMovementTests\BishopMovementTests.cs" />
+    <Compile Include="PieceMovementTests\CastleMovementTests.cs" />
+    <Compile Include="PieceMovementTests\KingMovementTests.cs" />
+    <Compile Include="PieceMovementTests\KnightMovementTests.cs" />
     <Compile Include="PieceMovementTests\PawnMovementTests.cs" />
+    <Compile Include="PieceMovementTests\QueenMovementTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelpers.cs" />
   </ItemGroup>

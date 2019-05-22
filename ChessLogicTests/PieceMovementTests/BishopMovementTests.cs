@@ -125,7 +125,7 @@ namespace ChessLogicTests.PieceMovementTests
             Assert.IsTrue(board.BoardPieces[bishopDest.x, bishopDest.y].PieceType == PieceType.None);
             
             BoardPieceMove move = new BoardPieceMove(bishopPos, bishopDest);
-            board.ApplyMove(move);
+            Assert.IsFalse(board.ApplyMove(move));
 
             Assert.IsTrue(board.BoardPieces[bishopPos.x, bishopPos.y].PieceType == PieceType.Bishop);
             Assert.IsTrue(board.BoardPieces[bishopDest.x, bishopDest.y].PieceType == PieceType.None);

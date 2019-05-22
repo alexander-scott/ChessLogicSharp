@@ -94,7 +94,7 @@ namespace ChessLogicTests.PieceMovementTests
             Assert.IsTrue(board.BoardPieces[castleDest.x, castleDest.y].PieceType == PieceType.None);
             
             BoardPieceMove move = new BoardPieceMove(castlePos, castleDest);
-            board.ApplyMove(move);
+            Assert.IsFalse(board.ApplyMove(move));
 
             Assert.IsTrue(board.BoardPieces[castlePos.x, castlePos.y].PieceType == PieceType.Castle);
             Assert.IsTrue(board.BoardPieces[castleDest.x, castleDest.y].PieceType == PieceType.None);

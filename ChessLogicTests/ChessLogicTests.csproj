@@ -42,9 +42,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionLogTests.cs" />
-    <Compile Include="CreationTests.cs" />
-    <Compile Include="MovementTests.cs" />
+    <Compile Include="BoardTests.cs" />
     <Compile Include="PieceMovementTests\BishopMovementTests.cs" />
     <Compile Include="PieceMovementTests\CastleMovementTests.cs" />
     <Compile Include="PieceMovementTests\KingMovementTests.cs" />

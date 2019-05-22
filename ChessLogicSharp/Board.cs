@@ -20,22 +20,47 @@ namespace ChessLogicSharp
         public Player PlayerTurn;
         public bool GameOver;
 
+        /// <summary>
+        /// Called when a player makes their move and its parameter is the current players go. 
+        /// </summary>
         public event PlayerDelegate OnTurnSwapped;
+        /// <summary>
+        /// Called when a player is in checkmate and its parameter is the winner.
+        /// </summary>
         public event PlayerDelegate OnPlayerCheckmate;
+        /// <summary>
+        /// Called when a player is in stalemate and its parameter is the winner.
+        /// </summary>
         public event PlayerDelegate OnPlayerStalemate;
+        /// <summary>
+        /// Called when a player is in checkmate and its parameter is the player in check.
+        /// </summary>
         public event PlayerDelegate OnPlayerInCheck;
+        /// <summary>
+        /// Called when a something on the board has changed and its parameter is a list of changes.
+        /// </summary>
         public event BoardActionsDelegate OnBoardChanged;
 
         public const int BOARD_DIMENSIONS = 8;
 
-        public void ApplyMove(BoardPieceMove move)
+        public bool ApplyMove(int xFrom, int yFrom, int xTo, int yTo)
+        {
+            return ApplyMove(new BoardPieceMove(new Vector2I(xFrom, yFrom), new Vector2I(xTo, yTo)));
+        }
+        
+        public bool ApplyMove(Vector2I from, Vector2I to)
+        {
+            return ApplyMove(new BoardPieceMove(from, to));
+        }
+        
+        public bool ApplyMove(BoardPieceMove move)
         {
             // Check the moving piece belongs to the correct player and is a valid move
             if (BoardPieces[move.From.x, move.From.y].PieceOwner != PlayerTurn ||
                 !ValidMovesCalc.IsMoveValid(move, PlayerTurn, this) || GameOver)
             {
                 // Move is invalid
-                return;
+                return false;
             }
 
             List<BoardAction> boardChanges = ApplyMoveToBoard(move);
@@ -56,7 +81,7 @@ namespace ChessLogicSharp
                     // CHECKMATE
                     OnPlayerCheckmate?.Invoke(PlayerTurn);
                     GameOver = true;
-                    return;
+                    return true;
                 }
                 else
                 {
@@ -71,12 +96,14 @@ namespace ChessLogicSharp
                     // STALEMATE
                     OnPlayerStalemate?.Invoke(PlayerTurn);
                     GameOver = true;
-                    return;
+                    return true;
                 }
             }
 
             ClearEnPassant();
             SwapPlayerTurns();
+
+            return true;
         }
 
         private void CheckPawnPromotion(BoardPieceMove move, List<BoardAction> actions)

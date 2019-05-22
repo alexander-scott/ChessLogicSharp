@@ -64,7 +64,7 @@ namespace ChessLogicTests.PieceMovementTests
             Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.None);
 
             BoardPieceMove move = new BoardPieceMove(pawnPos, pawnDest);
-            board.ApplyMove(move);
+            Assert.IsFalse(board.ApplyMove(move));
 
             Assert.IsTrue(board.BoardPieces[pawnPos.x, pawnPos.y].PieceType == PieceType.Pawn);
             Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.None);
@@ -97,7 +97,7 @@ namespace ChessLogicTests.PieceMovementTests
             Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.None);
 
             var move = new BoardPieceMove(pawnPos, pawnDest);
-            board.ApplyMove(move);
+            Assert.IsFalse(board.ApplyMove(move));
 
             Assert.IsTrue(board.BoardPieces[pawnPos.x, pawnPos.y].PieceType == PieceType.Pawn);
             Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.None);
@@ -130,7 +130,7 @@ namespace ChessLogicTests.PieceMovementTests
             Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.None);
 
             var move = new BoardPieceMove(pawnPos, pawnDest);
-            board.ApplyMove(move);
+            Assert.IsFalse(board.ApplyMove(move));
 
             Assert.IsTrue(board.BoardPieces[pawnPos.x, pawnPos.y].PieceType == PieceType.Pawn);
             Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.None);

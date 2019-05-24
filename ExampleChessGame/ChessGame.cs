@@ -13,7 +13,7 @@ namespace ExampleChessGame
             var board = BoardFactory.CreateBoard();
 
             // Loop until the game is over
-            while (!board.GameOver)
+            while (board.GameState != GameState.Ended)
             {
                 // Render the board in the console
                 PrintBoardToConsole(board);

@@ -12,10 +12,15 @@ namespace ChessLogicSharp.ChessPlayers
             _board = board;
             _player = player;
             
-            board.OnTurnSwapped += BoardOnOnTurnSwapped;
+            board.OnTurnSwapped += OnTurnSwapped;
+            board.OnGameStateChanged += OnGameStateChanged;
         }
 
-        protected abstract void BoardOnOnTurnSwapped(Player player);
+        protected virtual void OnGameStateChanged(GameState state)
+        {
+        }
+
+        protected abstract void OnTurnSwapped(Player player);
 
         public virtual void Update(float deltaTime)
         {

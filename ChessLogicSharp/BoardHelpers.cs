@@ -46,10 +46,15 @@ namespace ChessLogicSharp
         {
             return currentTurn == Player.PlayerOne ? Player.PlayerTwo : Player.PlayerOne;
         }
+        
+        public static string ConvertMoveIntoStringRep(BoardPieceMove move)
+        {
+            return ConvertPositionIntoStringRep(move.From) + ConvertPositionIntoStringRep(move.To);
+        }
 
         public static string ConvertPositionIntoStringRep(Vector2I pos)
         {
-            return "(" + XPosToLetter(pos.x) + YPosToLetter(pos.y) + ")";
+            return XPosToLetter(pos.x) + YPosToLetter(pos.y);
         }
 
         public static Vector2I ConvertStringRepIntoPos(string pos)

@@ -10,7 +10,7 @@ namespace ChessLogicSharp
                 BoardPiece[,] boardPieces = new BoardPiece[Board.BOARD_DIMENSIONS, Board.BOARD_DIMENSIONS];
                 CreateP1Set(boardPieces);
                 CreateP2Set(boardPieces);
-                return new Board {BoardPieces = boardPieces, PlayerTurn = Player.PlayerOne, Actions = new Stack<BoardAction>()};
+                return new Board {BoardPieces = boardPieces, PlayerTurn = Player.PlayerOne, Actions = new Stack<BoardAction>(), GameState = GameState.Started};
             }
 
             public static Board CreateBoard(char [,] board)

@@ -162,7 +162,7 @@ namespace ChessLogicTests
             board.ApplyMove(move);
             
             Assert.IsTrue(checkMate);
-            Assert.IsTrue(board.GameOver);
+            Assert.AreEqual(GameState.Ended, board.GameState);
             Assert.AreEqual(winningPlayer, Player.PlayerOne);
         }
 

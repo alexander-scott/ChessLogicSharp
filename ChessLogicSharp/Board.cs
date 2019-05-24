@@ -10,54 +10,80 @@ namespace ChessLogicSharp
         PlayerTwo
     }
 
+    public enum GameState
+    {
+        Started,
+        Ended,
+        Paused,
+        Resumed
+    }
+
     public delegate void PlayerDelegate(Player player);
+
     public delegate void BoardActionsDelegate(List<BoardAction> actions);
+
+    public delegate void BoardGameStateDelegate(GameState state);
 
     public class Board
     {
         public BoardPiece[,] BoardPieces;
         public Stack<BoardAction> Actions;
         public Player PlayerTurn;
-        public bool GameOver;
+        public GameState GameState;
+        
+        public bool CanMove => GameState == GameState.Started || GameState == GameState.Resumed;
 
         /// <summary>
         /// Called when a player makes their move and its parameter is the current players go. 
         /// </summary>
         public event PlayerDelegate OnTurnSwapped;
+
         /// <summary>
         /// Called when a player is in checkmate and its parameter is the winner.
         /// </summary>
         public event PlayerDelegate OnPlayerCheckmate;
+
         /// <summary>
         /// Called when a player is in stalemate and its parameter is the winner.
         /// </summary>
         public event PlayerDelegate OnPlayerStalemate;
+
         /// <summary>
         /// Called when a player is in checkmate and its parameter is the player in check.
         /// </summary>
         public event PlayerDelegate OnPlayerInCheck;
+
         /// <summary>
         /// Called when a something on the board has changed and its parameter is a list of changes.
         /// </summary>
         public event BoardActionsDelegate OnBoardChanged;
 
+        public event BoardGameStateDelegate OnGameStateChanged;
+
         public const int BOARD_DIMENSIONS = 8;
+
+        public void GameStateChange(GameState gameState)
+        {
+            GameState = gameState;
+            OnGameStateChanged?.Invoke(gameState);
+        }
 
         public bool ApplyMove(int xFrom, int yFrom, int xTo, int yTo)
         {
             return ApplyMove(new BoardPieceMove(new Vector2I(xFrom, yFrom), new Vector2I(xTo, yTo)));
         }
-        
+
         public bool ApplyMove(Vector2I from, Vector2I to)
         {
             return ApplyMove(new BoardPieceMove(from, to));
         }
-        
+
         public bool ApplyMove(BoardPieceMove move)
         {
             // Check the moving piece belongs to the correct player and is a valid move
             if (BoardPieces[move.From.x, move.From.y].PieceOwner != PlayerTurn ||
-                !ValidMovesCalc.IsMoveValid(move, PlayerTurn, this) || GameOver)
+                !ValidMovesCalc.IsMoveValid(move, PlayerTurn, this) || 
+                (!CanMove))
             {
                 // Move is invalid
                 return false;
@@ -80,7 +106,7 @@ namespace ChessLogicSharp
                 {
                     // CHECKMATE
                     OnPlayerCheckmate?.Invoke(PlayerTurn);
-                    GameOver = true;
+                    GameStateChange(GameState.Ended);
                     return true;
                 }
                 else
@@ -95,7 +121,7 @@ namespace ChessLogicSharp
                 {
                     // STALEMATE
                     OnPlayerStalemate?.Invoke(PlayerTurn);
-                    GameOver = true;
+                    GameStateChange(GameState.Ended);
                     return true;
                 }
             }

@@ -16,7 +16,7 @@ namespace ChessLogicSharp.ChessPlayers
             }
         }
 
-        protected override void BoardOnOnTurnSwapped(Player player)
+        protected override void OnTurnSwapped(Player player)
         {
             if (player == _player)
             {
@@ -26,7 +26,7 @@ namespace ChessLogicSharp.ChessPlayers
 
         public override void Update(float deltaTime)
         {
-            if (_finishedCalculating)
+            if (_finishedCalculating && _board.CanMove)
             {
                 // Can only move piece on the unity main thread
                 MovePiece(_bestMove);

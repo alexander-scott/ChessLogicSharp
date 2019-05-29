@@ -146,10 +146,13 @@ namespace ChessLogicTests
             Board board = BoardFactory.CreateBoard(boardLayout);
             bool checkMate = false;
             Player winningPlayer = Player.None;
-            board.OnPlayerCheckmate += delegate(Player player)
+            board.OnGameStateChanged += delegate(GameState state)
             {
+                if (state != GameState.WonByCheckmate)
+                    return;
+                
                 checkMate = true;
-                winningPlayer = player;
+                winningPlayer = board.PlayerTurn;
             };
             
             Vector2I castlePos = new Vector2I(6, 0);
@@ -162,8 +165,59 @@ namespace ChessLogicTests
             board.ApplyMove(move);
             
             Assert.IsTrue(checkMate);
-            Assert.AreEqual(GameState.Ended, board.GameState);
+            Assert.AreEqual(GameState.WonByCheckmate, board.GameState);
             Assert.AreEqual(winningPlayer, Player.PlayerOne);
+        }
+
+        [Test]
+        public void ResetBoardTest()
+        {
+            char[,] boardLayout =
+            {
+                {'e', 'e', 'e', 'e', 'K', 'e', 'e', 'e'},
+                {'e', 'e', 'e', 'e', 'e', 'e', 'e', 'c'},
+                {'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'},
+                {'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'},
+                {'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'}, 
+                {'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'},
+                {'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'},
+                {'e', 'e', 'e', 'e', 'k', 'e', 'c', 'e'}
+            };
+            boardLayout = boardLayout.RotateArray();
+            
+            Board board = BoardFactory.CreateBoard(boardLayout);
+            board.PlayerTurn = Player.PlayerTwo;
+            
+            BoardFactory.ResetBoard(board);
+            Assert.AreEqual(Player.PlayerOne, board.PlayerTurn);
+            
+            for (int x = 0; x < Board.BOARD_DIMENSIONS; x++)
+            {
+                for (int y = 0; y < Board.BOARD_DIMENSIONS; y++)
+                {
+                    BoardPiece currentPiece = board.BoardPieces[x, y];
+                    if (y == 0) // Bottom row - P1
+                    {
+                        Assert.IsTrue(PieceTypePositionCheck(x, Player.PlayerOne, currentPiece));
+                    }
+                    else if (y == 1) // Pawn row - P1
+                    {
+                        Assert.IsTrue(currentPiece.PieceType == PieceType.Pawn && currentPiece.PieceOwner == Player.PlayerOne);
+                    }
+                    else if (y == 6) // Pawn row - P2
+                    {
+                        Assert.IsTrue(currentPiece.PieceType == PieceType.Pawn && currentPiece.PieceOwner == Player.PlayerTwo);
+                    }
+                    else if (y == 7) // Top row - P2
+                    {
+                        Assert.IsTrue(PieceTypePositionCheck(x, Player.PlayerTwo, currentPiece));
+                    }
+                    else // Empty squares
+                    {
+                        Assert.IsTrue(currentPiece.PieceType == PieceType.None && currentPiece.PieceOwner == Player.None);
+                    }
+                }
+            }
         }
 
         private bool PieceTypePositionCheck(int xPos, Player player, BoardPiece piece)

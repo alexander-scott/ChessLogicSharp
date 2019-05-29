@@ -15,7 +15,9 @@ namespace ChessLogicSharp
         Started,
         Ended,
         Paused,
-        Resumed
+        Resumed,
+        WonByCheckmate,
+        WonByStaleMate,
     }
 
     public delegate void PlayerDelegate(Player player);
@@ -37,16 +39,6 @@ namespace ChessLogicSharp
         /// Called when a player makes their move and its parameter is the current players go. 
         /// </summary>
         public event PlayerDelegate OnTurnSwapped;
-
-        /// <summary>
-        /// Called when a player is in checkmate and its parameter is the winner.
-        /// </summary>
-        public event PlayerDelegate OnPlayerCheckmate;
-
-        /// <summary>
-        /// Called when a player is in stalemate and its parameter is the winner.
-        /// </summary>
-        public event PlayerDelegate OnPlayerStalemate;
 
         /// <summary>
         /// Called when a player is in checkmate and its parameter is the player in check.
@@ -105,23 +97,19 @@ namespace ChessLogicSharp
                 if (ValidMovesCalc.PlayerCanMove(this, BoardHelpers.GetOpponentPlayer(PlayerTurn)))
                 {
                     // CHECKMATE
-                    OnPlayerCheckmate?.Invoke(PlayerTurn);
-                    GameStateChange(GameState.Ended);
+                    GameStateChange(GameState.WonByCheckmate);
                     return true;
                 }
-                else
-                {
-                    // IN CHECK
-                    OnPlayerInCheck?.Invoke(BoardHelpers.GetOpponentPlayer(PlayerTurn));
-                }
+
+                // IN CHECK
+                OnPlayerInCheck?.Invoke(BoardHelpers.GetOpponentPlayer(PlayerTurn));
             }
             else
             {
                 if (ValidMovesCalc.PlayerCanMove(this, BoardHelpers.GetOpponentPlayer(PlayerTurn)))
                 {
                     // STALEMATE
-                    OnPlayerStalemate?.Invoke(PlayerTurn);
-                    GameStateChange(GameState.Ended);
+                    GameStateChange(GameState.WonByStaleMate);
                     return true;
                 }
             }

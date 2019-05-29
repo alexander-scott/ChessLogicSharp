@@ -4,9 +4,9 @@ using ChessLogicSharp.DataStructures;
 
 namespace ChessLogicSharp
 {
-    public static class MinMaxMoveCalc
+    public class MinMaxMoveCalc
     {
-        private const int SEARCH_DEPTH = 3;
+        private readonly int _searchDepth;
 
         private const int PAWN_SCORE = 20;
         private const int KNIGHT_SCORE = 80;
@@ -181,22 +181,27 @@ namespace ChessLogicSharp
 
         #endregion
 
+        public MinMaxMoveCalc(int searchDepth)
+        {
+            _searchDepth = searchDepth;
+        }
+
         /// <summary>
         /// Returns the best move for the current player by using the MinMax algorithm.
         /// </summary>
         /// <param name="board"></param>
         /// <returns></returns>
-        public static BoardPieceMove GetBestMove(Board board)
+        public BoardPieceMove GetBestMove(Board board)
         {
             BoardPieceMoveScore bestMove = null;
             Maximise(board, 0, ref bestMove, 10000000, board.PlayerTurn);
             return bestMove.Move;
         }
 
-        private static float Maximise(Board board, int depth, ref BoardPieceMoveScore maxBestMove, float beta, Player currentPlayer)
+        private float Maximise(Board board, int depth, ref BoardPieceMoveScore maxBestMove, float beta, Player currentPlayer)
         {
             // If the depth limit is reached, don't go any deeper and return the score of the board
-            if (depth >= SEARCH_DEPTH)
+            if (depth >= _searchDepth)
                 return ScoreTheBoard(board, currentPlayer);
 
             HashSet<BoardPieceMove> validMoves = new HashSet<BoardPieceMove>();
@@ -240,9 +245,9 @@ namespace ChessLogicSharp
             return alpha;
         }
 
-        private static float Minimise(Board board, int depth, float alpha, Player currentPlayer)
+        private float Minimise(Board board, int depth, float alpha, Player currentPlayer)
         {
-            if (depth >= SEARCH_DEPTH)
+            if (depth >= _searchDepth)
                 return ScoreTheBoard(board, currentPlayer);
 
             HashSet<BoardPieceMove> validMoves = new HashSet<BoardPieceMove>();

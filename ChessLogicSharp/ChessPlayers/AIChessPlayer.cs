@@ -7,9 +7,12 @@ namespace ChessLogicSharp.ChessPlayers
     {
         private BoardPieceMove _bestMove;
         private bool _finishedCalculating;
+
+        private readonly MinMaxMoveCalc _moveCalc;
     
-        public AIChessPlayer(Board board, Player player) : base(board, player)
+        public AIChessPlayer(Board board, Player player, int searchDepth) : base(board, player)
         {
+            _moveCalc = new MinMaxMoveCalc(searchDepth);
             if (board.PlayerTurn == _player)
             {
                 ThreadPool.QueueUserWorkItem((state) => CalculateAndMove());
@@ -36,7 +39,7 @@ namespace ChessLogicSharp.ChessPlayers
 
         private void CalculateAndMove()
         {
-            _bestMove = MinMaxMoveCalc.GetBestMove(_board);
+            _bestMove = _moveCalc.GetBestMove(_board);
             _finishedCalculating = true;
         }
     }

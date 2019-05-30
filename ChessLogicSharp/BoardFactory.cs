@@ -3,16 +3,27 @@ using ChessLogicSharp.DataStructures;
 
 namespace ChessLogicSharp
 {
+    /// <summary>
+    /// Creates instances of Boards.
+    /// </summary>
     public static class BoardFactory
     {
+        /// <summary>
+        /// Creates an instance of a Board with the pieces at the default positions.
+        /// </summary>
+        /// <returns>The Board instance</returns>
         public static Board CreateBoard()
         {
             BoardPiece[,] boardPieces = new BoardPiece[Board.BOARD_DIMENSIONS, Board.BOARD_DIMENSIONS];
             CreateP1Set(boardPieces);
             CreateP2Set(boardPieces);
-            return new Board {BoardPieces = boardPieces, PlayerTurn = Player.PlayerOne, Actions = new Stack<BoardAction>(), GameState = GameState.Started};
+            return new Board {BoardPieces = boardPieces, PlayerTurn = Player.PlayerOne, GameChanges = new Stack<BoardChange>(), GameState = GameState.Playing};
         }
 
+        /// <summary>
+        /// Creates an instance of a Board with the pieces at the specified positions
+        /// </summary>
+        /// <returns>The Board instance</returns>
         public static Board CreateBoard(char[,] board)
         {
             BoardPiece[,] boardPieces = new BoardPiece[Board.BOARD_DIMENSIONS, Board.BOARD_DIMENSIONS];
@@ -65,9 +76,13 @@ namespace ChessLogicSharp
                 }
             }
 
-            return new Board {BoardPieces = boardPieces, PlayerTurn = Player.PlayerOne, Actions = new Stack<BoardAction>()};
+            return new Board {BoardPieces = boardPieces, PlayerTurn = Player.PlayerOne, GameChanges = new Stack<BoardChange>()};
         }
 
+        /// <summary>
+        /// Resets the board to the default positions
+        /// </summary>
+        /// <param name="board">A reference to the board instance</param>
         public static void ResetBoard(Board board)
         {
             BoardPiece[,] boardPieces = new BoardPiece[Board.BOARD_DIMENSIONS, Board.BOARD_DIMENSIONS];
@@ -76,10 +91,16 @@ namespace ChessLogicSharp
 
             board.BoardPieces = boardPieces;
             board.PlayerTurn = Player.PlayerOne;
-            board.Actions.Clear();
-            board.GameStateChange(GameState.Started);
+            board.GameChanges.Clear();
+            board.ClearPlayers();
+            board.ChangeGameState(GameState.Playing);
         }
-        
+
+        /// <summary>
+        /// Resets the board to the specified piece positions
+        /// </summary>
+        /// <param name="board">A reference to the instance of the board</param>
+        /// <param name="piecePositions"></param>
         public static void ResetBoard(Board board, char[,] piecePositions)
         {
             BoardPiece[,] boardPieces = new BoardPiece[Board.BOARD_DIMENSIONS, Board.BOARD_DIMENSIONS];
@@ -134,8 +155,9 @@ namespace ChessLogicSharp
 
             board.BoardPieces = boardPieces;
             board.PlayerTurn = Player.PlayerOne;
-            board.Actions.Clear();
-            board.GameStateChange(GameState.Started);
+            board.GameChanges.Clear();
+            board.ClearPlayers();
+            board.ChangeGameState(GameState.Playing);
         }
 
         private static void CreateP1Set(BoardPiece[,] boardPieces)

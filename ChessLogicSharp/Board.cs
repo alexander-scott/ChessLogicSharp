@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ChessLogicSharp.ChessPlayers;
 using ChessLogicSharp.DataStructures;
 
 namespace ChessLogicSharp
@@ -12,7 +13,7 @@ namespace ChessLogicSharp
 
     public enum GameState
     {
-        Started,
+        Playing,
         Ended,
         Paused,
         Resumed,
@@ -22,18 +23,18 @@ namespace ChessLogicSharp
 
     public delegate void PlayerDelegate(Player player);
 
-    public delegate void BoardActionsDelegate(List<BoardAction> actions);
+    public delegate void BoardChangesDelegate(List<BoardChange> changes);
+
+    public delegate bool MoveDelegate(BoardPieceMove move);
 
     public delegate void BoardGameStateDelegate(GameState state);
 
     public class Board
     {
         public BoardPiece[,] BoardPieces;
-        public Stack<BoardAction> Actions;
+        public Stack<BoardChange> GameChanges;
         public Player PlayerTurn;
         public GameState GameState;
-        
-        public bool CanMove => GameState == GameState.Started || GameState == GameState.Resumed;
 
         /// <summary>
         /// Called when a player makes their move and its parameter is the current players go. 
@@ -48,46 +49,102 @@ namespace ChessLogicSharp
         /// <summary>
         /// Called when a something on the board has changed and its parameter is a list of changes.
         /// </summary>
-        public event BoardActionsDelegate OnBoardChanged;
+        public event BoardChangesDelegate OnBoardChanged;
 
+        /// <summary>
+        /// Called when the state of the game changes, such as when a game is paused, resumed or ended.
+        /// </summary>
         public event BoardGameStateDelegate OnGameStateChanged;
 
         public const int BOARD_DIMENSIONS = 8;
 
-        public void GameStateChange(GameState gameState)
+        private readonly List<ChessPlayer> _players = new List<ChessPlayer>();
+
+        public void ChangeGameState(GameState gameState)
         {
-            GameState = gameState;
             OnGameStateChanged?.Invoke(gameState);
+
+            // Send the event for resumed but then set the actual state back to playing to make it less confusing
+            if (gameState == GameState.Resumed) 
+            {
+                gameState = GameState.Playing;
+            }
+
+            GameState = gameState;
         }
 
-        public bool ApplyMove(int xFrom, int yFrom, int xTo, int yTo)
+        #region Players
+
+        /// <summary>
+        /// Adds an instance of a player to the board and subscribe to its on move made event.
+        /// </summary>
+        /// <param name="player"></param>
+        public void AddPlayer(ChessPlayer player)
         {
-            return ApplyMove(new BoardPieceMove(new Vector2I(xFrom, yFrom), new Vector2I(xTo, yTo)));
+            _players.Add(player);
+            player.OnMoveMade += PlayerOnOnMoveMade;
         }
 
-        public bool ApplyMove(Vector2I from, Vector2I to)
+        /// <summary>
+        /// Remove the players from the board and unsubscribe from when the make moves, removing their ability to make moves.
+        /// </summary>
+        public void ClearPlayers()
         {
-            return ApplyMove(new BoardPieceMove(from, to));
+            for (int i = 0; i < _players.Count; i++)
+            {
+                _players[i].OnMoveMade -= PlayerOnOnMoveMade;
+            }
+
+            _players.Clear();
+        }
+        
+        /// <summary>
+        /// Called when a player makes a move and returns if the move was valid or not.
+        /// </summary>
+        /// <param name="move"></param>
+        /// <returns></returns>
+        private bool PlayerOnOnMoveMade(BoardPieceMove move)
+        {
+            return ApplyMove(move);
         }
 
-        public bool ApplyMove(BoardPieceMove move)
+        /// <summary>
+        /// Updates the chess players.
+        /// </summary>
+        /// <param name="deltaTime"></param>
+        public void UpdatePlayers(float deltaTime)
+        {
+            if (_players == null || GameState != GameState.Playing)
+                return;
+
+            for (int i = 0; i < _players.Count; i++)
+            {
+                _players[i].Update(deltaTime);
+            }
+        }
+
+        #endregion
+        
+        #region Apply Moves
+
+        private bool ApplyMove(BoardPieceMove move)
         {
             // Check the moving piece belongs to the correct player and is a valid move
-            if (BoardPieces[move.From.x, move.From.y].PieceOwner != PlayerTurn ||
-                !ValidMovesCalc.IsMoveValid(move, PlayerTurn, this) || 
-                (!CanMove))
+            if (BoardPieces[move.From.X, move.From.Y].PieceOwner != PlayerTurn ||
+                !ValidMovesCalc.IsMoveValid(move, PlayerTurn, this) ||
+                (GameState != GameState.Playing))
             {
                 // Move is invalid
                 return false;
             }
 
-            List<BoardAction> boardChanges = ApplyMoveToBoard(move);
+            List<BoardChange> boardChanges = ApplyMoveToBoard(move);
             CheckPawnPromotion(move, boardChanges);
 
-            // Store actions
+            // Store changes
             for (int i = 0; i < boardChanges.Count; i++)
             {
-                Actions.Push(boardChanges[i]);
+                GameChanges.Push(boardChanges[i]);
             }
 
             OnBoardChanged?.Invoke(boardChanges);
@@ -97,7 +154,7 @@ namespace ChessLogicSharp
                 if (ValidMovesCalc.PlayerCanMove(this, BoardHelpers.GetOpponentPlayer(PlayerTurn)))
                 {
                     // CHECKMATE
-                    GameStateChange(GameState.WonByCheckmate);
+                    ChangeGameState(GameState.WonByCheckmate);
                     return true;
                 }
 
@@ -109,7 +166,7 @@ namespace ChessLogicSharp
                 if (ValidMovesCalc.PlayerCanMove(this, BoardHelpers.GetOpponentPlayer(PlayerTurn)))
                 {
                     // STALEMATE
-                    GameStateChange(GameState.WonByStaleMate);
+                    ChangeGameState(GameState.WonByStaleMate);
                     return true;
                 }
             }
@@ -119,180 +176,7 @@ namespace ChessLogicSharp
 
             return true;
         }
-
-        private void CheckPawnPromotion(BoardPieceMove move, List<BoardAction> actions)
-        {
-            //Check if we need to promote a pawn.
-            if (BoardPieces[move.To.x, move.To.y].PieceType == PieceType.Pawn &&
-                (move.To.y == 0 || move.To.y == 7))
-            {
-                // Time to promote.
-                actions.Add(new PromotePawnAction
-                {
-                    Type = BoardActionType.PromotePawn,
-                    NewPieceType = PieceType.Queen,
-                    Player = PlayerTurn,
-                    PawnPosition = move.To
-                });
-                BoardPieces[move.To.x, move.To.y].PieceType = PieceType.Queen;
-            }
-        }
-
-        private List<BoardAction> ApplyMoveToBoard(BoardPieceMove move)
-        {
-            List<BoardAction> boardChanges = new List<BoardAction>();
-            //If this was an en'passant move the taken piece will not be in the square we moved to.
-            if (BoardPieces[move.From.x, move.From.y].PieceType == PieceType.Pawn)
-            {
-                //If the pawn is on its start position and it double jumps, then en'passant may be available for opponent.
-                if ((move.From.y == 1 && move.To.y == 3) ||
-                    (move.From.y == 6 && move.To.y == 4))
-                {
-                    BoardPieces[move.From.x, move.From.y].CanEnPassant = true;
-                }
-            }
-
-            //En'Passant removal of enemy pawn.
-            //If our pawn moved into an empty position to the left or right, then must be En'Passant.
-            if (BoardPieces[move.From.x, move.From.y].PieceType == PieceType.Pawn &&
-                BoardPieces[move.To.x, move.To.y].PieceType == PieceType.None &&
-                ((move.From.x < move.To.x) || (move.From.x > move.To.x)))
-            {
-                boardChanges.Add(EnPassantMove(move));
-            }
-            // Special king moves including castling
-            else if (BoardPieces[move.From.x, move.From.y].PieceType == PieceType.King)
-            {
-                boardChanges.Add(KingMove(move));
-            }
-            // Standard move or take
-            else
-            {
-                boardChanges.Add(StandardMove(move));
-            }
-
-            return boardChanges;
-        }
-
-        private static void StandardMoveBoardChange(BoardPiece[,] board, BoardPieceMove move)
-        {
-            board[move.From.x, move.From.y].HasMoved = true;
-            board[move.To.x, move.To.y] = board[move.From.x, move.From.y];
-            board[move.From.x, move.From.y] = new BoardPiece();
-        }
-
-        private BoardAction StandardMove(BoardPieceMove move)
-        {
-            BoardAction action;
-
-            //Move the piece into new position.
-            BoardActionType actionType = BoardPieces[move.To.x, move.To.y].PieceType != PieceType.None
-                ? BoardActionType.TakePiece
-                : BoardActionType.MovePiece;
-            if (actionType == BoardActionType.MovePiece)
-            {
-                // Piece movement
-                action = new MovePieceAction
-                {
-                    Type = actionType,
-                    Move = move,
-                    Player = PlayerTurn,
-                    MovedPieceType = BoardPieces[move.From.x, move.From.y].PieceType
-                };
-            }
-            else
-            {
-                // Piece take
-                action = new TakePieceAction
-                {
-                    Type = actionType,
-                    Move = move,
-                    Player = PlayerTurn,
-                    TakingPieceType = BoardPieces[move.From.x, move.From.y].PieceType,
-                    TakenPieceType = BoardPieces[move.To.x, move.To.y].PieceType
-                };
-            }
-
-            StandardMoveBoardChange(BoardPieces, move);
-
-            return action;
-        }
-
-        private BoardAction KingMove(BoardPieceMove move)
-        {
-            BoardAction action;
-            //Are we moving 2 spaces??? This indicates CASTLING.
-            if (move.To.x - move.From.x == 2)
-            {
-                //Moving 2 spaces to the right - Move the ROOK on the right into its new position.
-                BoardPieces[move.From.x + 3, move.From.y].HasMoved = true;
-                BoardPieces[move.From.x + 1, move.From.y] = BoardPieces[move.From.x + 3, move.From.y];
-                BoardPieces[move.From.x + 3, move.From.y] = new BoardPiece();
-
-                // Castling
-                action = (new CastlingAction
-                {
-                    Type = BoardActionType.Castling,
-                    CastleMove = new BoardPieceMove(new Vector2I(move.From.x + 3, move.From.y),
-                        new Vector2I(move.From.x + 1, move.From.y)),
-                    KingMove = move,
-                    Player = PlayerTurn
-                });
-
-                // Move the king
-                StandardMoveBoardChange(BoardPieces, move);
-            }
-            else if (move.To.x - move.From.x == -2)
-            {
-                //Moving 2 spaces to the left - Move the ROOK on the left into its new position.
-                //Move the piece into new position.
-                BoardPieces[move.From.x - 4, move.From.y].HasMoved = true;
-                BoardPieces[move.From.x - 1, move.From.y] = BoardPieces[move.From.x - 4, move.From.y];
-                BoardPieces[move.From.x - 4, move.From.y] = new BoardPiece();
-
-                // Castling
-                action = (new CastlingAction
-                {
-                    Type = BoardActionType.Castling,
-                    CastleMove = new BoardPieceMove(new Vector2I(move.From.x - 4, move.From.y),
-                        new Vector2I(move.From.x - 1, move.From.y)),
-                    KingMove = move,
-                    Player = PlayerTurn
-                });
-
-                // Move the king
-                StandardMoveBoardChange(BoardPieces, move);
-            }
-            else
-            {
-                // No castling, standard move
-                action = StandardMove(move);
-            }
-
-            return action;
-        }
-
-        private BoardAction EnPassantMove(BoardPieceMove move)
-        {
-            int pawnDirectionOpposite = BoardHelpers.GetPlayerDirection(BoardHelpers.GetOpponentPlayer(PlayerTurn));
-            BoardAction action = (new EnPassantTakePieceAction
-            {
-                Type = BoardActionType.EnPassantTakePiece,
-                Move = move,
-                Player = PlayerTurn,
-                TakingPieceType = BoardPieces[move.From.x, move.From.y].PieceType,
-                TakenPawnPosition = new Vector2I(move.To.x, move.To.y + pawnDirectionOpposite)
-            });
-
-            // Move piece
-            StandardMoveBoardChange(BoardPieces, move);
-
-            // Remove pawn
-            BoardPieces[move.To.x, move.To.y + pawnDirectionOpposite] = new BoardPiece();
-
-            return action;
-        }
-
+        
         private void SwapPlayerTurns()
         {
             PlayerTurn = PlayerTurn == Player.PlayerOne ? Player.PlayerTwo : Player.PlayerOne;
@@ -314,5 +198,180 @@ namespace ChessLogicSharp
                 }
             }
         }
+
+        private void CheckPawnPromotion(BoardPieceMove move, List<BoardChange> changes)
+        {
+            //Check if we need to promote a pawn.
+            if (BoardPieces[move.To.X, move.To.Y].PieceType == PieceType.Pawn &&
+                (move.To.Y == 0 || move.To.Y == 7))
+            {
+                // Time to promote.
+                changes.Add(new PromotePawnChange
+                {
+                    Type = BoardChangeType.PromotePawn,
+                    NewPieceType = PieceType.Queen,
+                    Player = PlayerTurn,
+                    PawnPosition = move.To
+                });
+                BoardPieces[move.To.X, move.To.Y].PieceType = PieceType.Queen;
+            }
+        }
+
+        private List<BoardChange> ApplyMoveToBoard(BoardPieceMove move)
+        {
+            List<BoardChange> boardChanges = new List<BoardChange>();
+            //If this was an en'passant move the taken piece will not be in the square we moved to.
+            if (BoardPieces[move.From.X, move.From.Y].PieceType == PieceType.Pawn)
+            {
+                //If the pawn is on its start position and it double jumps, then en'passant may be available for opponent.
+                if ((move.From.Y == 1 && move.To.Y == 3) ||
+                    (move.From.Y == 6 && move.To.Y == 4))
+                {
+                    BoardPieces[move.From.X, move.From.Y].CanEnPassant = true;
+                }
+            }
+
+            //En'Passant removal of enemy pawn.
+            //If our pawn moved into an empty position to the left or right, then must be En'Passant.
+            if (BoardPieces[move.From.X, move.From.Y].PieceType == PieceType.Pawn &&
+                BoardPieces[move.To.X, move.To.Y].PieceType == PieceType.None &&
+                ((move.From.X < move.To.X) || (move.From.X > move.To.X)))
+            {
+                boardChanges.Add(EnPassantMove(move));
+            }
+            // Special king moves including castling
+            else if (BoardPieces[move.From.X, move.From.Y].PieceType == PieceType.King)
+            {
+                boardChanges.Add(KingMove(move));
+            }
+            // Standard move or take
+            else
+            {
+                boardChanges.Add(StandardMove(move));
+            }
+
+            return boardChanges;
+        }
+
+        private static void StandardMoveBoardChange(BoardPiece[,] board, BoardPieceMove move)
+        {
+            board[move.From.X, move.From.Y].HasMoved = true;
+            board[move.To.X, move.To.Y] = board[move.From.X, move.From.Y];
+            board[move.From.X, move.From.Y] = new BoardPiece();
+        }
+
+        private BoardChange StandardMove(BoardPieceMove move)
+        {
+            BoardChange change;
+
+            //Move the piece into new position.
+            BoardChangeType changeType = BoardPieces[move.To.X, move.To.Y].PieceType != PieceType.None
+                ? BoardChangeType.TakePiece
+                : BoardChangeType.MovePiece;
+            if (changeType == BoardChangeType.MovePiece)
+            {
+                // Piece movement
+                change = new MovePieceChange
+                {
+                    Type = changeType,
+                    Move = move,
+                    Player = PlayerTurn,
+                    MovedPieceType = BoardPieces[move.From.X, move.From.Y].PieceType
+                };
+            }
+            else
+            {
+                // Piece take
+                change = new TakePieceChange
+                {
+                    Type = changeType,
+                    Move = move,
+                    Player = PlayerTurn,
+                    TakingPieceType = BoardPieces[move.From.X, move.From.Y].PieceType,
+                    TakenPieceType = BoardPieces[move.To.X, move.To.Y].PieceType
+                };
+            }
+
+            StandardMoveBoardChange(BoardPieces, move);
+
+            return change;
+        }
+
+        private BoardChange KingMove(BoardPieceMove move)
+        {
+            BoardChange change;
+            //Are we moving 2 spaces??? This indicates CASTLING.
+            if (move.To.X - move.From.X == 2)
+            {
+                //Moving 2 spaces to the right - Move the ROOK on the right into its new position.
+                BoardPieces[move.From.X + 3, move.From.Y].HasMoved = true;
+                BoardPieces[move.From.X + 1, move.From.Y] = BoardPieces[move.From.X + 3, move.From.Y];
+                BoardPieces[move.From.X + 3, move.From.Y] = new BoardPiece();
+
+                // Castling
+                change = (new CastlingChange
+                {
+                    Type = BoardChangeType.Castling,
+                    CastleMove = new BoardPieceMove(new Vector2I(move.From.X + 3, move.From.Y),
+                        new Vector2I(move.From.X + 1, move.From.Y)),
+                    KingMove = move,
+                    Player = PlayerTurn
+                });
+
+                // Move the king
+                StandardMoveBoardChange(BoardPieces, move);
+            }
+            else if (move.To.X - move.From.X == -2)
+            {
+                //Moving 2 spaces to the left - Move the ROOK on the left into its new position.
+                //Move the piece into new position.
+                BoardPieces[move.From.X - 4, move.From.Y].HasMoved = true;
+                BoardPieces[move.From.X - 1, move.From.Y] = BoardPieces[move.From.X - 4, move.From.Y];
+                BoardPieces[move.From.X - 4, move.From.Y] = new BoardPiece();
+
+                // Castling
+                change = (new CastlingChange
+                {
+                    Type = BoardChangeType.Castling,
+                    CastleMove = new BoardPieceMove(new Vector2I(move.From.X - 4, move.From.Y),
+                        new Vector2I(move.From.X - 1, move.From.Y)),
+                    KingMove = move,
+                    Player = PlayerTurn
+                });
+
+                // Move the king
+                StandardMoveBoardChange(BoardPieces, move);
+            }
+            else
+            {
+                // No castling, standard move
+                change = StandardMove(move);
+            }
+
+            return change;
+        }
+
+        private BoardChange EnPassantMove(BoardPieceMove move)
+        {
+            int pawnDirectionOpposite = BoardHelpers.GetPlayerDirection(BoardHelpers.GetOpponentPlayer(PlayerTurn));
+            BoardChange change = (new EnPassantTakePieceChange
+            {
+                Type = BoardChangeType.EnPassantTakePiece,
+                Move = move,
+                Player = PlayerTurn,
+                TakingPieceType = BoardPieces[move.From.X, move.From.Y].PieceType,
+                TakenPawnPosition = new Vector2I(move.To.X, move.To.Y + pawnDirectionOpposite)
+            });
+
+            // Move piece
+            StandardMoveBoardChange(BoardPieces, move);
+
+            // Remove pawn
+            BoardPieces[move.To.X, move.To.Y + pawnDirectionOpposite] = new BoardPiece();
+
+            return change;
+        }
+
+        #endregion
     }
 }

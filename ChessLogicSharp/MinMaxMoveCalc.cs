@@ -215,9 +215,9 @@ namespace ChessLogicSharp
             {
                 // Create a copy of the board and then perform the current move
                 Board newBoard = BoardHelpers.DuplicateBoard(board);
-                newBoard.BoardPieces[move.From.x, move.From.y].HasMoved = true;
-                newBoard.BoardPieces[move.To.x, move.To.y] = newBoard.BoardPieces[move.From.x, move.From.y];
-                newBoard.BoardPieces[move.From.x, move.From.y] = new BoardPiece();
+                newBoard.BoardPieces[move.From.X, move.From.Y].HasMoved = true;
+                newBoard.BoardPieces[move.To.X, move.To.Y] = newBoard.BoardPieces[move.From.X, move.From.Y];
+                newBoard.BoardPieces[move.From.X, move.From.Y] = new BoardPiece();
                 newBoard.PlayerTurn = BoardHelpers.GetOpponentPlayer(newBoard.PlayerTurn);
 
                 // Go down a layer and find the minimum score available for the enemy (PLAYER). Set it to alpha if it is greater than a previous alpha.
@@ -261,9 +261,9 @@ namespace ChessLogicSharp
             {
                 // Create a copy of the board and then perform the current move
                 Board newBoard = BoardHelpers.DuplicateBoard(board);
-                newBoard.BoardPieces[move.From.x, move.From.y].HasMoved = true;
-                newBoard.BoardPieces[move.To.x, move.To.y] = newBoard.BoardPieces[move.From.x, move.From.y];
-                newBoard.BoardPieces[move.From.x, move.From.y] = new BoardPiece();
+                newBoard.BoardPieces[move.From.X, move.From.Y].HasMoved = true;
+                newBoard.BoardPieces[move.To.X, move.To.Y] = newBoard.BoardPieces[move.From.X, move.From.Y];
+                newBoard.BoardPieces[move.From.X, move.From.Y] = new BoardPiece();
                 newBoard.PlayerTurn = BoardHelpers.GetOpponentPlayer(newBoard.PlayerTurn);
                 var newMove = new BoardPieceMoveScore(move, beta);
 

@@ -1,4 +1,5 @@
 using ChessLogicSharp;
+using ChessLogicSharp.ChessPlayers;
 using ChessLogicSharp.DataStructures;
 using NUnit.Framework;
 
@@ -24,18 +25,22 @@ namespace ChessLogicTests.PieceMovementTests
             boardLayout = boardLayout.RotateArray();
             
             Board board = BoardFactory.CreateBoard(boardLayout);
+            BasicPlayer player1 = new BasicPlayer(board, Player.PlayerOne);
+            board.AddPlayer(player1);
+            BasicPlayer player2 = new BasicPlayer(board, Player.PlayerTwo);
+            board.AddPlayer(player2);
             
             Vector2I bishopPos = new Vector2I(2, 0);
-            Assert.IsTrue(board.BoardPieces[bishopPos.x, bishopPos.y].PieceType == PieceType.Bishop);
+            Assert.IsTrue(board.BoardPieces[bishopPos.X, bishopPos.Y].PieceType == PieceType.Bishop);
             
             Vector2I bishopDest = new Vector2I(4, 2);
-            Assert.IsTrue(board.BoardPieces[bishopDest.x, bishopDest.y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[bishopDest.X, bishopDest.Y].PieceType == PieceType.None);
             
             BoardPieceMove move = new BoardPieceMove(bishopPos, bishopDest);
-            board.ApplyMove(move);
+            player1.ApplyMove(move);
 
-            Assert.IsTrue(board.BoardPieces[bishopPos.x, bishopPos.y].PieceType == PieceType.None);
-            Assert.IsTrue(board.BoardPieces[bishopDest.x, bishopDest.y].PieceType == PieceType.Bishop);
+            Assert.IsTrue(board.BoardPieces[bishopPos.X, bishopPos.Y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[bishopDest.X, bishopDest.Y].PieceType == PieceType.Bishop);
         }
         
         [Test]
@@ -55,18 +60,22 @@ namespace ChessLogicTests.PieceMovementTests
             boardLayout = boardLayout.RotateArray();
             
             Board board = BoardFactory.CreateBoard(boardLayout);
+            BasicPlayer player1 = new BasicPlayer(board, Player.PlayerOne);
+            board.AddPlayer(player1);
+            BasicPlayer player2 = new BasicPlayer(board, Player.PlayerTwo);
+            board.AddPlayer(player2);
             
             Vector2I bishopPos = new Vector2I(5, 0);
-            Assert.IsTrue(board.BoardPieces[bishopPos.x, bishopPos.y].PieceType == PieceType.Bishop);
+            Assert.IsTrue(board.BoardPieces[bishopPos.X, bishopPos.Y].PieceType == PieceType.Bishop);
             
             Vector2I bishopDest = new Vector2I(3, 2);
-            Assert.IsTrue(board.BoardPieces[bishopDest.x, bishopDest.y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[bishopDest.X, bishopDest.Y].PieceType == PieceType.None);
             
             BoardPieceMove move = new BoardPieceMove(bishopPos, bishopDest);
-            board.ApplyMove(move);
+            player1.ApplyMove(move);
 
-            Assert.IsTrue(board.BoardPieces[bishopPos.x, bishopPos.y].PieceType == PieceType.None);
-            Assert.IsTrue(board.BoardPieces[bishopDest.x, bishopDest.y].PieceType == PieceType.Bishop);
+            Assert.IsTrue(board.BoardPieces[bishopPos.X, bishopPos.Y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[bishopDest.X, bishopDest.Y].PieceType == PieceType.Bishop);
         }
         
         [Test]
@@ -86,18 +95,22 @@ namespace ChessLogicTests.PieceMovementTests
             boardLayout = boardLayout.RotateArray();
             
             Board board = BoardFactory.CreateBoard(boardLayout);
+            BasicPlayer player1 = new BasicPlayer(board, Player.PlayerOne);
+            board.AddPlayer(player1);
+            BasicPlayer player2 = new BasicPlayer(board, Player.PlayerTwo);
+            board.AddPlayer(player2);
             
             Vector2I bishopPos = new Vector2I(3, 2);
-            Assert.IsTrue(board.BoardPieces[bishopPos.x, bishopPos.y].PieceType == PieceType.Bishop);
+            Assert.IsTrue(board.BoardPieces[bishopPos.X, bishopPos.Y].PieceType == PieceType.Bishop);
             
             Vector2I bishopDest = new Vector2I(5, 0);
-            Assert.IsTrue(board.BoardPieces[bishopDest.x, bishopDest.y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[bishopDest.X, bishopDest.Y].PieceType == PieceType.None);
             
             BoardPieceMove move = new BoardPieceMove(bishopPos, bishopDest);
-            board.ApplyMove(move);
+            player1.ApplyMove(move);
 
-            Assert.IsTrue(board.BoardPieces[bishopPos.x, bishopPos.y].PieceType == PieceType.None);
-            Assert.IsTrue(board.BoardPieces[bishopDest.x, bishopDest.y].PieceType == PieceType.Bishop);
+            Assert.IsTrue(board.BoardPieces[bishopPos.X, bishopPos.Y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[bishopDest.X, bishopDest.Y].PieceType == PieceType.Bishop);
         }
         
         [Test]
@@ -117,18 +130,22 @@ namespace ChessLogicTests.PieceMovementTests
             boardLayout = boardLayout.RotateArray();
             
             Board board = BoardFactory.CreateBoard(boardLayout);
+            BasicPlayer player1 = new BasicPlayer(board, Player.PlayerOne);
+            board.AddPlayer(player1);
+            BasicPlayer player2 = new BasicPlayer(board, Player.PlayerTwo);
+            board.AddPlayer(player2);
             
             Vector2I bishopPos = new Vector2I(2, 0);
-            Assert.IsTrue(board.BoardPieces[bishopPos.x, bishopPos.y].PieceType == PieceType.Bishop);
+            Assert.IsTrue(board.BoardPieces[bishopPos.X, bishopPos.Y].PieceType == PieceType.Bishop);
             
             Vector2I bishopDest = new Vector2I(2, 3);
-            Assert.IsTrue(board.BoardPieces[bishopDest.x, bishopDest.y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[bishopDest.X, bishopDest.Y].PieceType == PieceType.None);
             
             BoardPieceMove move = new BoardPieceMove(bishopPos, bishopDest);
-            Assert.IsFalse(board.ApplyMove(move));
+            Assert.IsFalse(player1.ApplyMove(move));
 
-            Assert.IsTrue(board.BoardPieces[bishopPos.x, bishopPos.y].PieceType == PieceType.Bishop);
-            Assert.IsTrue(board.BoardPieces[bishopDest.x, bishopDest.y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[bishopPos.X, bishopPos.Y].PieceType == PieceType.Bishop);
+            Assert.IsTrue(board.BoardPieces[bishopDest.X, bishopDest.Y].PieceType == PieceType.None);
         }
     }
 }

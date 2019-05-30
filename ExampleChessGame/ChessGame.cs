@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using ChessLogicSharp;
+using ChessLogicSharp.ChessPlayers;
 using ChessLogicSharp.DataStructures;
+using ChessLogicTests;
 
 namespace ExampleChessGame
 {
@@ -11,6 +13,11 @@ namespace ExampleChessGame
         {
             // Create the board
             var board = BoardFactory.CreateBoard();
+            
+            BasicPlayer player1 = new BasicPlayer(board, Player.PlayerOne);
+            board.AddPlayer(player1);
+            BasicPlayer player2 = new BasicPlayer(board, Player.PlayerTwo);
+            board.AddPlayer(player2);
 
             // Loop until the game is over
             while (board.GameState != GameState.Ended)
@@ -46,7 +53,14 @@ namespace ExampleChessGame
                 }
 
                 // Apply the move
-                board.ApplyMove(move);
+                if (board.PlayerTurn == Player.PlayerOne)
+                {
+                    player1.ApplyMove(move);
+                }
+                else
+                {
+                    player2.ApplyMove(move);
+                }
             }
             
             PrintBoardToConsole(board);

@@ -43,7 +43,8 @@
     <Compile Include="BoardHelpers.cs" />
     <Compile Include="ChessPlayers\AIChessPlayer.cs" />
     <Compile Include="ChessPlayers\ChessPlayer.cs" />
-    <Compile Include="DataStructures\BoardAction.cs" />
+    <Compile Include="ChessPlayers\BasicPlayer.cs" />
+    <Compile Include="DataStructures\BoardChange.cs" />
     <Compile Include="DataStructures\BoardPiece.cs" />
     <Compile Include="DataStructures\BoardPieceMove.cs" />
     <Compile Include="MinMaxMoveCalc.cs" />

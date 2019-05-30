@@ -46,6 +46,10 @@
       <Project>{d75ffae5-6454-463d-91c4-7d64899e6392}</Project>
       <Name>ChessLogicSharp</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ChessLogicTests\ChessLogicTests.csproj">
+      <Project>{24a94768-4564-416c-9e9c-138013598508}</Project>
+      <Name>ChessLogicTests</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

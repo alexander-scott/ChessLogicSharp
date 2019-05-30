@@ -50,7 +50,6 @@
     <Compile Include="PieceMovementTests\PawnMovementTests.cs" />
     <Compile Include="PieceMovementTests\QueenMovementTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ChessLogicSharp\ChessLogicSharp.csproj">

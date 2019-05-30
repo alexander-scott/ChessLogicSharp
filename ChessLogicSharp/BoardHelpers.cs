@@ -54,7 +54,7 @@ namespace ChessLogicSharp
 
         public static string ConvertPositionIntoStringRep(Vector2I pos)
         {
-            return XPosToLetter(pos.x) + YPosToLetter(pos.y);
+            return XPosToLetter(pos.X) + YPosToLetter(pos.Y);
         }
 
         public static Vector2I ConvertStringRepIntoPos(string pos)
@@ -194,17 +194,30 @@ namespace ChessLogicSharp
             }
             return intRep > 0 && intRep < 9;
         }
+        
+        public static char[,] RotateArray(this char[,] board)
+        {
+            char[,] ret = new char[board.Length, board.Length];
+
+            for (int i = 0; i < 8; ++i) {
+                for (int j = 0; j < 8; ++j) {
+                    ret[i, j] = board[8 - j - 1, i];
+                }
+            }
+
+            return ret;
+        }
     }
 
     public struct Vector2I
     {
-        public int x;
-        public int y;
+        public int X;
+        public int Y;
 
-        public Vector2I(int x1, int y1)
+        public Vector2I(int x, int y)
         {
-            x = x1;
-            y = y1;
+            X = x;
+            Y = y;
         }
     }
 }

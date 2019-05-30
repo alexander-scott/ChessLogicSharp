@@ -96,10 +96,10 @@ namespace ChessLogicSharp
 
             // Now we have our kings position lets check if it is under attack from anywhere.
             // Horizontal - Right
-            int x = kingPosition.x;
+            int x = kingPosition.X;
             while (++x < Board.BOARD_DIMENSIONS)
             {
-                BoardPiece currentPiece = board[x, kingPosition.y];
+                BoardPiece currentPiece = board[x, kingPosition.Y];
                 if (currentPiece.PieceType != PieceType.None)
                 {
                     if (currentPiece.PieceOwner == player)
@@ -112,10 +112,10 @@ namespace ChessLogicSharp
             }
 
             // Horizontal - Left
-            x = kingPosition.x;
+            x = kingPosition.X;
             while (--x >= 0)
             {
-                BoardPiece currentPiece = board[x, kingPosition.y];
+                BoardPiece currentPiece = board[x, kingPosition.Y];
                 if (currentPiece.PieceType != PieceType.None)
                 {
                     if (currentPiece.PieceOwner == player)
@@ -128,10 +128,10 @@ namespace ChessLogicSharp
             }
 
             // Vertical - Up
-            int y = kingPosition.y;
+            int y = kingPosition.Y;
             while (--y >= 0)
             {
-                BoardPiece currentPiece = board[kingPosition.x, y];
+                BoardPiece currentPiece = board[kingPosition.X, y];
                 if (currentPiece.PieceType != PieceType.None)
                 {
                     if (currentPiece.PieceOwner == player)
@@ -144,10 +144,10 @@ namespace ChessLogicSharp
             }
 
             // Vertical - Down
-            y = kingPosition.y;
+            y = kingPosition.Y;
             while (++y < Board.BOARD_DIMENSIONS)
             {
-                BoardPiece currentPiece = board[kingPosition.x, y];
+                BoardPiece currentPiece = board[kingPosition.X, y];
                 if (currentPiece.PieceType != PieceType.None)
                 {
                     if (currentPiece.PieceOwner == player)
@@ -160,8 +160,8 @@ namespace ChessLogicSharp
             }
 
             // Diagonal - Right Down
-            x = kingPosition.x;
-            y = kingPosition.y;
+            x = kingPosition.X;
+            y = kingPosition.Y;
             while (++y < Board.BOARD_DIMENSIONS && ++x < Board.BOARD_DIMENSIONS)
             {
                 BoardPiece currentPiece = board[x, y];
@@ -177,8 +177,8 @@ namespace ChessLogicSharp
             }
 
             // Diagonal - Right Up
-            x = kingPosition.x;
-            y = kingPosition.y;
+            x = kingPosition.X;
+            y = kingPosition.Y;
             while (--y >= 0 && ++x < Board.BOARD_DIMENSIONS)
             {
                 BoardPiece currentPiece = board[x, y];
@@ -194,8 +194,8 @@ namespace ChessLogicSharp
             }
 
             //Diagonal - Left Down
-            x = kingPosition.x;
-            y = kingPosition.y;
+            x = kingPosition.X;
+            y = kingPosition.Y;
             while (++y < Board.BOARD_DIMENSIONS && --x >= 0)
             {
                 BoardPiece currentPiece = board[x, y];
@@ -211,8 +211,8 @@ namespace ChessLogicSharp
             }
 
             // Diagonal - Left Up
-            x = kingPosition.x;
-            y = kingPosition.y;
+            x = kingPosition.X;
+            y = kingPosition.Y;
             while (--y >= 0 && --x >= 0)
             {
                 BoardPiece currentPiece = board[x, y];
@@ -228,8 +228,8 @@ namespace ChessLogicSharp
             }
 
             // Awkward Knight moves
-            x = kingPosition.x + 2;
-            y = kingPosition.y + 1;
+            x = kingPosition.X + 2;
+            y = kingPosition.Y + 1;
             if (x < Board.BOARD_DIMENSIONS && y < Board.BOARD_DIMENSIONS)
             {
                 BoardPiece currentPiece = board[x, y];
@@ -238,8 +238,8 @@ namespace ChessLogicSharp
                     return true;
             }
 
-            x = kingPosition.x + 2;
-            y = kingPosition.y - 1;
+            x = kingPosition.X + 2;
+            y = kingPosition.Y - 1;
             if (x < Board.BOARD_DIMENSIONS && y >= 0)
             {
                 BoardPiece currentPiece = board[x, y];
@@ -248,8 +248,8 @@ namespace ChessLogicSharp
                     return true;
             }
 
-            x = kingPosition.x + 1;
-            y = kingPosition.y + 2;
+            x = kingPosition.X + 1;
+            y = kingPosition.Y + 2;
             if (x < Board.BOARD_DIMENSIONS && y < Board.BOARD_DIMENSIONS)
             {
                 BoardPiece currentPiece = board[x, y];
@@ -258,8 +258,8 @@ namespace ChessLogicSharp
                     return true;
             }
 
-            x = kingPosition.x - 1;
-            y = kingPosition.y + 2;
+            x = kingPosition.X - 1;
+            y = kingPosition.Y + 2;
             if (x >= 0 && y < Board.BOARD_DIMENSIONS)
             {
                 BoardPiece currentPiece = board[x, y];
@@ -268,8 +268,8 @@ namespace ChessLogicSharp
                     return true;
             }
 
-            x = kingPosition.x - 2;
-            y = kingPosition.y + 1;
+            x = kingPosition.X - 2;
+            y = kingPosition.Y + 1;
             if (x >= 0 && y < Board.BOARD_DIMENSIONS)
             {
                 BoardPiece currentPiece = board[x, y];
@@ -278,8 +278,8 @@ namespace ChessLogicSharp
                     return true;
             }
 
-            x = kingPosition.x - 2;
-            y = kingPosition.y - 1;
+            x = kingPosition.X - 2;
+            y = kingPosition.Y - 1;
             if (x >= 0 && y >= 0)
             {
                 BoardPiece currentPiece = board[x, y];
@@ -288,8 +288,8 @@ namespace ChessLogicSharp
                     return true;
             }
 
-            x = kingPosition.x - 1;
-            y = kingPosition.y - 2;
+            x = kingPosition.X - 1;
+            y = kingPosition.Y - 2;
             if (x >= 0 && y >= 0)
             {
                 BoardPiece currentPiece = board[x, y];
@@ -298,8 +298,8 @@ namespace ChessLogicSharp
                     return true;
             }
 
-            x = kingPosition.x + 1;
-            y = kingPosition.y - 2;
+            x = kingPosition.X + 1;
+            y = kingPosition.Y - 2;
             if (x < Board.BOARD_DIMENSIONS && y >= 0)
             {
                 BoardPiece currentPiece = board[x, y];
@@ -309,9 +309,9 @@ namespace ChessLogicSharp
             }
 
             // Opponent King positions
-            for (int yPos = kingPosition.y - 1; yPos < kingPosition.y + 2; yPos++)
+            for (int yPos = kingPosition.Y - 1; yPos < kingPosition.Y + 2; yPos++)
             {
-                for (int xPos = kingPosition.x - 1; xPos < kingPosition.x + 2; xPos++)
+                for (int xPos = kingPosition.X - 1; xPos < kingPosition.X + 2; xPos++)
                 {
                     if (xPos >= 0 && xPos < Board.BOARD_DIMENSIONS && yPos >= 0 && yPos < Board.BOARD_DIMENSIONS)
                     {
@@ -327,8 +327,8 @@ namespace ChessLogicSharp
 
             // Opponent Pawns
             int opponentPawnDirection = BoardHelpers.GetPlayerDirection(player);
-            x = kingPosition.x + 1;
-            y = kingPosition.y + opponentPawnDirection;
+            x = kingPosition.X + 1;
+            y = kingPosition.Y + opponentPawnDirection;
             if (x < Board.BOARD_DIMENSIONS && y >= 0 && y < Board.BOARD_DIMENSIONS)
             {
                 BoardPiece currentPiece = board[x, y];
@@ -337,8 +337,8 @@ namespace ChessLogicSharp
                     return true;
             }
 
-            x = kingPosition.x - 1;
-            y = kingPosition.y + opponentPawnDirection;
+            x = kingPosition.X - 1;
+            y = kingPosition.Y + opponentPawnDirection;
             if (x >= 0 && y >= 0 && y < Board.BOARD_DIMENSIONS)
             {
                 BoardPiece currentPiece = board[x, y];
@@ -375,16 +375,16 @@ namespace ChessLogicSharp
         {
             BoardPiece[,] tempBoard = BoardHelpers.DuplicateBoard(board);
 
-            if (moveToCheck.To.x >= 0 && moveToCheck.To.x < Board.BOARD_DIMENSIONS &&
-                moveToCheck.To.y >= 0 && moveToCheck.To.y < Board.BOARD_DIMENSIONS)
+            if (moveToCheck.To.X >= 0 && moveToCheck.To.X < Board.BOARD_DIMENSIONS &&
+                moveToCheck.To.Y >= 0 && moveToCheck.To.Y < Board.BOARD_DIMENSIONS)
             {
                 // We check with colour passed in to enable the same functions to construct attacked spaces
                 // as well as constructing the positions we can move to.
-                if (tempBoard[moveToCheck.To.x, moveToCheck.To.y].PieceType == PieceType.None)
+                if (tempBoard[moveToCheck.To.X, moveToCheck.To.Y].PieceType == PieceType.None)
                 {
                     // Will this leave us in check?
-                    tempBoard[moveToCheck.To.x, moveToCheck.To.y] = tempBoard[moveToCheck.From.x, moveToCheck.From.y];
-                    tempBoard[moveToCheck.From.x, moveToCheck.From.y] = new BoardPiece();
+                    tempBoard[moveToCheck.To.X, moveToCheck.To.Y] = tempBoard[moveToCheck.From.X, moveToCheck.From.Y];
+                    tempBoard[moveToCheck.From.X, moveToCheck.From.Y] = new BoardPiece();
 
                     if (!IsPlayerInCheck(tempBoard, player))
                     {
@@ -394,11 +394,11 @@ namespace ChessLogicSharp
                 else
                 {
                     // A piece so no more moves after this, but can we take it?
-                    if (tempBoard[moveToCheck.To.x, moveToCheck.To.y].PieceOwner != player)
+                    if (tempBoard[moveToCheck.To.X, moveToCheck.To.Y].PieceOwner != player)
                     {
                         // Will this leave us in check?
-                        tempBoard[moveToCheck.To.x, moveToCheck.To.y] = tempBoard[moveToCheck.From.x, moveToCheck.From.y];
-                        tempBoard[moveToCheck.From.x, moveToCheck.From.y] = new BoardPiece();
+                        tempBoard[moveToCheck.To.X, moveToCheck.To.Y] = tempBoard[moveToCheck.From.X, moveToCheck.From.Y];
+                        tempBoard[moveToCheck.From.X, moveToCheck.From.Y] = new BoardPiece();
 
                         if (!IsPlayerInCheck(tempBoard, player))
                         {
@@ -428,16 +428,16 @@ namespace ChessLogicSharp
             
             BoardPiece[,] tempBoard = BoardHelpers.DuplicateBoard(board.BoardPieces);
 
-            if (moveToCheck.To.x >= 0 && moveToCheck.To.x < Board.BOARD_DIMENSIONS &&
-                moveToCheck.To.y >= 0 && moveToCheck.To.y < Board.BOARD_DIMENSIONS)
+            if (moveToCheck.To.X >= 0 && moveToCheck.To.X < Board.BOARD_DIMENSIONS &&
+                moveToCheck.To.Y >= 0 && moveToCheck.To.Y < Board.BOARD_DIMENSIONS)
             {
                 // We check with colour passed in to enable the same functions to construct attacked spaces
                 // as well as constructing the positions we can move to.
-                if (tempBoard[moveToCheck.To.x, moveToCheck.To.y].PieceType == PieceType.None)
+                if (tempBoard[moveToCheck.To.X, moveToCheck.To.Y].PieceType == PieceType.None)
                 {
                     // Will this leave us in check?
-                    tempBoard[moveToCheck.To.x, moveToCheck.To.y] = tempBoard[moveToCheck.From.x, moveToCheck.From.y];
-                    tempBoard[moveToCheck.From.x, moveToCheck.From.y] = new BoardPiece();
+                    tempBoard[moveToCheck.To.X, moveToCheck.To.Y] = tempBoard[moveToCheck.From.X, moveToCheck.From.Y];
+                    tempBoard[moveToCheck.From.X, moveToCheck.From.Y] = new BoardPiece();
 
                     if (!IsPlayerInCheck(tempBoard, player))
                     {
@@ -447,11 +447,11 @@ namespace ChessLogicSharp
                 else
                 {
                     // A piece so no more moves after this, but can we take it?
-                    if (tempBoard[moveToCheck.To.x, moveToCheck.To.y].PieceOwner != player)
+                    if (tempBoard[moveToCheck.To.X, moveToCheck.To.Y].PieceOwner != player)
                     {
                         // Will this leave us in check?
-                        tempBoard[moveToCheck.To.x, moveToCheck.To.y] = tempBoard[moveToCheck.From.x, moveToCheck.From.y];
-                        tempBoard[moveToCheck.From.x, moveToCheck.From.y] = new BoardPiece();
+                        tempBoard[moveToCheck.To.X, moveToCheck.To.Y] = tempBoard[moveToCheck.From.X, moveToCheck.From.Y];
+                        tempBoard[moveToCheck.From.X, moveToCheck.From.Y] = new BoardPiece();
 
                         if (!IsPlayerInCheck(tempBoard, player))
                         {
@@ -478,48 +478,48 @@ namespace ChessLogicSharp
             int pawnDirection = BoardHelpers.GetPlayerDirection(boardPiece.PieceOwner);
 
             // Single step FORWARD.
-            int xPos = piecePosition.x;
-            int yPos = piecePosition.y + pawnDirection;
+            int xPos = piecePosition.X;
+            int yPos = piecePosition.Y + pawnDirection;
             if (yPos >= 0 && yPos < Board.BOARD_DIMENSIONS && tempBoard[xPos, yPos].PieceType == PieceType.None)
             {
                 // Will this leave us in check? Only interested in check if its one of our moves.
-                tempBoard[xPos, yPos] = tempBoard[piecePosition.x, piecePosition.y];
-                tempBoard[piecePosition.x, piecePosition.y] = new BoardPiece();
+                tempBoard[xPos, yPos] = tempBoard[piecePosition.X, piecePosition.Y];
+                tempBoard[piecePosition.X, piecePosition.Y] = new BoardPiece();
                 if (!IsPlayerInCheck(tempBoard, boardPiece.PieceOwner))
                 {
-                    moves.Add(new BoardPieceMove(piecePosition.x, piecePosition.y, piecePosition.x, piecePosition.y + pawnDirection));
+                    moves.Add(new BoardPieceMove(piecePosition.X, piecePosition.Y, piecePosition.X, piecePosition.Y + pawnDirection));
                 }
             }
 
             // Double step FORWARD.
-            if ((boardPiece.PieceOwner == Player.PlayerOne && piecePosition.y == 1) ||
-                (boardPiece.PieceOwner == Player.PlayerTwo && piecePosition.y == 6))
+            if ((boardPiece.PieceOwner == Player.PlayerOne && piecePosition.Y == 1) ||
+                (boardPiece.PieceOwner == Player.PlayerTwo && piecePosition.Y == 6))
             {
                 //Reset the board.
                 tempBoard = BoardHelpers.DuplicateBoard(board);
 
-                int yPos2 = piecePosition.y + pawnDirection * 2;
+                int yPos2 = piecePosition.Y + pawnDirection * 2;
                 if (tempBoard[xPos, yPos].PieceType == PieceType.None &&
                     tempBoard[xPos, yPos2].PieceType == PieceType.None)
                 {
                     //Will this leave us in check? Only interested in check if its one of our moves.
-                    tempBoard[xPos, yPos2] = tempBoard[piecePosition.x, piecePosition.y];
-                    tempBoard[piecePosition.x, piecePosition.y] = new BoardPiece();
+                    tempBoard[xPos, yPos2] = tempBoard[piecePosition.X, piecePosition.Y];
+                    tempBoard[piecePosition.X, piecePosition.Y] = new BoardPiece();
 
                     if (!IsPlayerInCheck(tempBoard, boardPiece.PieceOwner))
                     {
-                        moves.Add(new BoardPieceMove(piecePosition.x, piecePosition.y, piecePosition.x, yPos2));
+                        moves.Add(new BoardPieceMove(piecePosition.X, piecePosition.Y, piecePosition.X, yPos2));
                     }
                 }
             }
 
             // En'Passant move.
-            if (piecePosition.y == 4 && boardPiece.PieceOwner == Player.PlayerOne ||
-                piecePosition.y == 3 && boardPiece.PieceOwner == Player.PlayerTwo)
+            if (piecePosition.Y == 4 && boardPiece.PieceOwner == Player.PlayerOne ||
+                piecePosition.Y == 3 && boardPiece.PieceOwner == Player.PlayerTwo)
             {
                 // Pawn beside us, can we en'passant.
-                xPos = piecePosition.x - 1;
-                yPos = piecePosition.y;
+                xPos = piecePosition.X - 1;
+                yPos = piecePosition.Y;
                 if (xPos >= 0)
                 {
                     // Reset the board.
@@ -529,17 +529,17 @@ namespace ChessLogicSharp
                     if (leftPiece.PieceType == PieceType.Pawn && leftPiece.CanEnPassant)
                     {
                         //Will this leave us in check? Only interested in check if its one of our moves.
-                        tempBoard[xPos, yPos] = tempBoard[piecePosition.x, piecePosition.y];
-                        tempBoard[piecePosition.x, piecePosition.y] = new BoardPiece();
+                        tempBoard[xPos, yPos] = tempBoard[piecePosition.X, piecePosition.Y];
+                        tempBoard[piecePosition.X, piecePosition.Y] = new BoardPiece();
 
                         if (!IsPlayerInCheck(tempBoard, boardPiece.PieceOwner))
                         {
-                            moves.Add(new BoardPieceMove(piecePosition.x, piecePosition.y,piecePosition.x - 1, piecePosition.y + pawnDirection));
+                            moves.Add(new BoardPieceMove(piecePosition.X, piecePosition.Y,piecePosition.X - 1, piecePosition.Y + pawnDirection));
                         }
                     }
                 }
 
-                xPos = piecePosition.x + 1;
+                xPos = piecePosition.X + 1;
                 if (xPos < Board.BOARD_DIMENSIONS)
                 {
                     // Reset the board.
@@ -549,64 +549,64 @@ namespace ChessLogicSharp
                     if (rightPiece.PieceType == PieceType.Pawn && rightPiece.CanEnPassant)
                     {
                         //Will this leave us in check? Only interested in check if its one of our moves.
-                        tempBoard[xPos, yPos] = tempBoard[piecePosition.x, piecePosition.y];
-                        tempBoard[piecePosition.x, piecePosition.y] = new BoardPiece();
+                        tempBoard[xPos, yPos] = tempBoard[piecePosition.X, piecePosition.Y];
+                        tempBoard[piecePosition.X, piecePosition.Y] = new BoardPiece();
 
                         if (!IsPlayerInCheck(tempBoard, boardPiece.PieceOwner))
                         {
-                            moves.Add(new BoardPieceMove(piecePosition.x, piecePosition.y,
-                                piecePosition.x + 1, piecePosition.y + pawnDirection));
+                            moves.Add(new BoardPieceMove(piecePosition.X, piecePosition.Y,
+                                piecePosition.X + 1, piecePosition.Y + pawnDirection));
                         }
                     }
                 }
             }
 
             // Take a piece move.
-            if (piecePosition.y > 0 && piecePosition.y < Board.BOARD_DIMENSIONS - 1)
+            if (piecePosition.Y > 0 && piecePosition.Y < Board.BOARD_DIMENSIONS - 1)
             {
                 // Ahead of selected pawn to the LEFT.
-                if (piecePosition.x > 0)
+                if (piecePosition.X > 0)
                 {
                     // Reset the board.
                     tempBoard = BoardHelpers.DuplicateBoard(board);
 
-                    xPos = piecePosition.x - 1;
-                    yPos = piecePosition.y + pawnDirection;
+                    xPos = piecePosition.X - 1;
+                    yPos = piecePosition.Y + pawnDirection;
                     BoardPiece aheadLeftPiece = tempBoard[xPos, yPos];
                     if (aheadLeftPiece.PieceType != PieceType.None &&
                         aheadLeftPiece.PieceOwner != boardPiece.PieceOwner)
                     {
                         // Will this leave us in check? Only interested in check if its one of our moves.
-                        tempBoard[xPos, yPos] = tempBoard[piecePosition.x, piecePosition.y];
-                        tempBoard[piecePosition.x, piecePosition.y] = new BoardPiece();
+                        tempBoard[xPos, yPos] = tempBoard[piecePosition.X, piecePosition.Y];
+                        tempBoard[piecePosition.X, piecePosition.Y] = new BoardPiece();
 
                         if (!IsPlayerInCheck(tempBoard, boardPiece.PieceOwner))
                         {
-                            moves.Add(new BoardPieceMove(piecePosition.x, piecePosition.y, xPos, piecePosition.y + pawnDirection));
+                            moves.Add(new BoardPieceMove(piecePosition.X, piecePosition.Y, xPos, piecePosition.Y + pawnDirection));
                         }
                     }
                 }
 
                 // Ahead of selected pawn to the RIGHT.
-                if (piecePosition.x < Board.BOARD_DIMENSIONS - 1)
+                if (piecePosition.X < Board.BOARD_DIMENSIONS - 1)
                 {
                     //Rest the board.
                     tempBoard = BoardHelpers.DuplicateBoard(board);
 
-                    xPos = piecePosition.x + 1;
-                    yPos = piecePosition.y + pawnDirection;
+                    xPos = piecePosition.X + 1;
+                    yPos = piecePosition.Y + pawnDirection;
                     BoardPiece aheadRightPiece = tempBoard[xPos, yPos];
                     if (aheadRightPiece.PieceType != PieceType.None &&
                         aheadRightPiece.PieceOwner != boardPiece.PieceOwner)
                     {
                         // Will this leave us in check? Only interested in check if its one of our moves.
-                        tempBoard[xPos, yPos] = tempBoard[piecePosition.x, piecePosition.y];
-                        tempBoard[piecePosition.x, piecePosition.y] = new BoardPiece();
+                        tempBoard[xPos, yPos] = tempBoard[piecePosition.X, piecePosition.Y];
+                        tempBoard[piecePosition.X, piecePosition.Y] = new BoardPiece();
 
                         if (!IsPlayerInCheck(tempBoard, boardPiece.PieceOwner))
                         {
-                            moves.Add(new BoardPieceMove(piecePosition.x, piecePosition.y,
-                                xPos, piecePosition.y + pawnDirection));
+                            moves.Add(new BoardPieceMove(piecePosition.X, piecePosition.Y,
+                                xPos, piecePosition.Y + pawnDirection));
                         }
                     }
                 }
@@ -617,34 +617,34 @@ namespace ChessLogicSharp
             BoardPiece[,] boardBoardPieces, HashSet<BoardPieceMove> moves)
         {
             //Moves to the RIGHT.
-            var move = new BoardPieceMove(piecePosition.x, piecePosition.y, piecePosition.x + 2,piecePosition.y + 1);
+            var move = new BoardPieceMove(piecePosition.X, piecePosition.Y, piecePosition.X + 2,piecePosition.Y + 1);
             CheckMoveValidityAndStoreMove(move, currentPiece.PieceOwner, boardBoardPieces, moves);
 
-            move.To.y = piecePosition.y - 1;
+            move.To.Y = piecePosition.Y - 1;
             CheckMoveValidityAndStoreMove(move, currentPiece.PieceOwner, boardBoardPieces, moves);
 
             //Moves to the LEFT.
-            move.To.x = piecePosition.x - 2;
-            move.To.y = piecePosition.y + 1;
+            move.To.X = piecePosition.X - 2;
+            move.To.Y = piecePosition.Y + 1;
             CheckMoveValidityAndStoreMove(move, currentPiece.PieceOwner, boardBoardPieces, moves);
 
-            move.To.y = piecePosition.y - 1;
+            move.To.Y = piecePosition.Y - 1;
             CheckMoveValidityAndStoreMove(move, currentPiece.PieceOwner, boardBoardPieces, moves);
 
             //Moves ABOVE.
-            move.To.x = piecePosition.x + 1;
-            move.To.y = piecePosition.y - 2;
+            move.To.X = piecePosition.X + 1;
+            move.To.Y = piecePosition.Y - 2;
             CheckMoveValidityAndStoreMove(move, currentPiece.PieceOwner, boardBoardPieces, moves);
 
-            move.To.x = piecePosition.x - 1;
+            move.To.X = piecePosition.X - 1;
             CheckMoveValidityAndStoreMove(move, currentPiece.PieceOwner, boardBoardPieces, moves);
 
             //Moves BELOW.
-            move.To.x = piecePosition.x + 1;
-            move.To.y = piecePosition.y + 2;
+            move.To.X = piecePosition.X + 1;
+            move.To.Y = piecePosition.Y + 2;
             CheckMoveValidityAndStoreMove(move, currentPiece.PieceOwner, boardBoardPieces, moves);
 
-            move.To.x = piecePosition.x - 1;
+            move.To.X = piecePosition.X - 1;
             CheckMoveValidityAndStoreMove(move, currentPiece.PieceOwner, boardBoardPieces, moves);
         }
 
@@ -655,37 +655,37 @@ namespace ChessLogicSharp
             BoardPieceMove move;
 
             //Vertical DOWN the board.
-            for (int yPos = piecePosition.y + 1; yPos < Board.BOARD_DIMENSIONS; yPos++)
+            for (int yPos = piecePosition.Y + 1; yPos < Board.BOARD_DIMENSIONS; yPos++)
             {
                 //Keep checking moves until one is invalid.
-                move = new BoardPieceMove(piecePosition.x, piecePosition.y, piecePosition.x, yPos);
+                move = new BoardPieceMove(piecePosition.X, piecePosition.Y, piecePosition.X, yPos);
                 if (CheckMoveValidityAndStoreMove(move, currentPiece.PieceOwner, boardPieces, moves) == false)
                     break;
             }
 
             //Vertical UP the board.
-            for (int yPos = piecePosition.y - 1; yPos >= 0; yPos--)
+            for (int yPos = piecePosition.Y - 1; yPos >= 0; yPos--)
             {
                 //Keep checking moves until one is invalid.
-                move = new BoardPieceMove(piecePosition.x, piecePosition.y, piecePosition.x, yPos);
+                move = new BoardPieceMove(piecePosition.X, piecePosition.Y, piecePosition.X, yPos);
                 if (CheckMoveValidityAndStoreMove(move, currentPiece.PieceOwner, boardPieces, moves) == false)
                     break;
             }
 
             //Horizontal LEFT of the board.
-            for (int xPos = piecePosition.x - 1; xPos >= 0; xPos--)
+            for (int xPos = piecePosition.X - 1; xPos >= 0; xPos--)
             {
                 //Keep checking moves until one is invalid.
-                move = new BoardPieceMove(piecePosition.x, piecePosition.y, xPos, piecePosition.y);
+                move = new BoardPieceMove(piecePosition.X, piecePosition.Y, xPos, piecePosition.Y);
                 if (CheckMoveValidityAndStoreMove(move, currentPiece.PieceOwner, boardPieces, moves) == false)
                     break;
             }
 
             //Horizontal RIGHT of the board.
-            for (int xPos = piecePosition.x + 1; xPos < Board.BOARD_DIMENSIONS; xPos++)
+            for (int xPos = piecePosition.X + 1; xPos < Board.BOARD_DIMENSIONS; xPos++)
             {
                 //Keep checking moves until one is invalid.
-                move = new BoardPieceMove(piecePosition.x, piecePosition.y, xPos, piecePosition.y);
+                move = new BoardPieceMove(piecePosition.X, piecePosition.Y, xPos, piecePosition.Y);
                 if (CheckMoveValidityAndStoreMove(move, currentPiece.PieceOwner, boardPieces, moves) == false)
                     break;
             }
@@ -697,45 +697,45 @@ namespace ChessLogicSharp
             BoardPieceMove move;
 
             //ABOVE & LEFT
-            for (int yPos = piecePosition.y - 1, xPos = piecePosition.x - 1;
+            for (int yPos = piecePosition.Y - 1, xPos = piecePosition.X - 1;
                 yPos >= 0 && xPos >= 0;
                 yPos--, xPos--)
             {
                 //Keep checking moves until one is invalid.
-                move = new BoardPieceMove(piecePosition.x, piecePosition.y, xPos, yPos);
+                move = new BoardPieceMove(piecePosition.X, piecePosition.Y, xPos, yPos);
                 if (CheckMoveValidityAndStoreMove(move, currentPiece.PieceOwner, boardPieces, moves) == false)
                     break;
             }
 
             //ABOVE & RIGHT
-            for (int yPos = piecePosition.y - 1, xPos = piecePosition.x + 1;
+            for (int yPos = piecePosition.Y - 1, xPos = piecePosition.X + 1;
                 yPos >= 0 && xPos < Board.BOARD_DIMENSIONS;
                 yPos--, xPos++)
             {
                 //Keep checking moves until one is invalid.
-                move = new BoardPieceMove(piecePosition.x, piecePosition.y, xPos, yPos);
+                move = new BoardPieceMove(piecePosition.X, piecePosition.Y, xPos, yPos);
                 if (CheckMoveValidityAndStoreMove(move, currentPiece.PieceOwner, boardPieces, moves) == false)
                     break;
             }
 
             //BELOW & LEFT
-            for (int yPos = piecePosition.y + 1, xPos = piecePosition.x - 1;
+            for (int yPos = piecePosition.Y + 1, xPos = piecePosition.X - 1;
                 yPos < Board.BOARD_DIMENSIONS && xPos >= 0;
                 yPos++, xPos--)
             {
                 //Keep checking moves until one is invalid.
-                move = new BoardPieceMove(piecePosition.x, piecePosition.y, xPos, yPos);
+                move = new BoardPieceMove(piecePosition.X, piecePosition.Y, xPos, yPos);
                 if (CheckMoveValidityAndStoreMove(move, currentPiece.PieceOwner, boardPieces, moves) == false)
                     break;
             }
 
             //BELOW & RIGHT
-            for (int yPos = piecePosition.y + 1, xPos = piecePosition.x + 1;
+            for (int yPos = piecePosition.Y + 1, xPos = piecePosition.X + 1;
                 yPos < Board.BOARD_DIMENSIONS && xPos < Board.BOARD_DIMENSIONS;
                 yPos++, xPos++)
             {
                 //Keep checking moves until one is invalid.
-                move = new BoardPieceMove(piecePosition.x, piecePosition.y, xPos, yPos);
+                move = new BoardPieceMove(piecePosition.X, piecePosition.Y, xPos, yPos);
                 if (CheckMoveValidityAndStoreMove(move, currentPiece.PieceOwner, boardPieces, moves) == false)
                     break;
             }
@@ -747,15 +747,15 @@ namespace ChessLogicSharp
             BoardPieceMove move;
 
             //Start at position top left of king and move across and down.
-            for (int yPos = piecePosition.y - 1; yPos <= piecePosition.y + 1; yPos++)
+            for (int yPos = piecePosition.Y - 1; yPos <= piecePosition.Y + 1; yPos++)
             {
-                for (int xPos = piecePosition.x - 1; xPos <= piecePosition.x + 1; xPos++)
+                for (int xPos = piecePosition.X - 1; xPos <= piecePosition.X + 1; xPos++)
                 {
                     if (yPos >= 0 && yPos < Board.BOARD_DIMENSIONS && xPos >= 0 && xPos < Board.BOARD_DIMENSIONS)
                     {
                         //Check if move is valid and store it. We dont care about the return value as we are only
                         // checking one move in each direction.
-                        move = new BoardPieceMove(piecePosition.x, piecePosition.y, xPos, yPos);
+                        move = new BoardPieceMove(piecePosition.X, piecePosition.Y, xPos, yPos);
                         CheckMoveValidityAndStoreMove(move, kingPiece.PieceOwner, board.BoardPieces, moves);
                     }
                 }
@@ -775,24 +775,24 @@ namespace ChessLogicSharp
                 if (!IsPlayerInCheck(tempBoard.BoardPieces, kingPiece.PieceOwner))
                 {
                     //CASTLE to the right.
-                    BoardPiece king = tempBoard.BoardPieces[piecePosition.x, piecePosition.y];
+                    BoardPiece king = tempBoard.BoardPieces[piecePosition.X, piecePosition.Y];
 
                     if (!king.HasMoved)
                     {
-                        BoardPiece rightRook = tempBoard.BoardPieces[piecePosition.x + 3, piecePosition.y];
+                        BoardPiece rightRook = tempBoard.BoardPieces[piecePosition.X + 3, piecePosition.Y];
                         if (rightRook.PieceType == PieceType.Castle && !rightRook.HasMoved)
                         {
-                            if (tempBoard.BoardPieces[piecePosition.x + 1, piecePosition.y].PieceType == PieceType.None &&
-                                tempBoard.BoardPieces[piecePosition.x + 2, piecePosition.y].PieceType == PieceType.None)
+                            if (tempBoard.BoardPieces[piecePosition.X + 1, piecePosition.Y].PieceType == PieceType.None &&
+                                tempBoard.BoardPieces[piecePosition.X + 2, piecePosition.Y].PieceType == PieceType.None)
                             {
                                 //Cannot CASTLE through a CHECK position.
                                 bool canCastle = true;
                                 foreach (var oppMove in allOpponentMoves)
                                 {
-                                    if (oppMove.To.x == piecePosition.x + 2 &&
-                                        oppMove.To.y == piecePosition.y ||
-                                        oppMove.To.x == piecePosition.x + 1 &&
-                                        oppMove.To.y == piecePosition.y)
+                                    if (oppMove.To.X == piecePosition.X + 2 &&
+                                        oppMove.To.Y == piecePosition.Y ||
+                                        oppMove.To.X == piecePosition.X + 1 &&
+                                        oppMove.To.Y == piecePosition.Y)
                                     {
                                         canCastle = false;
                                     }
@@ -801,7 +801,7 @@ namespace ChessLogicSharp
                                 //Check if the final position is valid.
                                 if (canCastle)
                                 {
-                                    move = new BoardPieceMove(piecePosition.x, piecePosition.y, piecePosition.x + 2, piecePosition.y);
+                                    move = new BoardPieceMove(piecePosition.X, piecePosition.Y, piecePosition.X + 2, piecePosition.Y);
                                     CheckMoveValidityAndStoreMove(move, kingPiece.PieceOwner, tempBoard.BoardPieces, moves);
                                 }
                             }
@@ -809,24 +809,24 @@ namespace ChessLogicSharp
 
                         //CASTLE to the left.
                         tempBoard = BoardHelpers.DuplicateBoard(board);
-                        BoardPiece leftRook = tempBoard.BoardPieces[piecePosition.x - 4, piecePosition.y];
+                        BoardPiece leftRook = tempBoard.BoardPieces[piecePosition.X - 4, piecePosition.Y];
 
                         if (leftRook.PieceType == PieceType.Castle && !leftRook.HasMoved)
                         {
-                            if (tempBoard.BoardPieces[piecePosition.x - 1, piecePosition.y].PieceType == PieceType.None &&
-                                tempBoard.BoardPieces[piecePosition.x - 2, piecePosition.y].PieceType == PieceType.None &&
-                                tempBoard.BoardPieces[piecePosition.x - 3, piecePosition.y].PieceType == PieceType.None)
+                            if (tempBoard.BoardPieces[piecePosition.X - 1, piecePosition.Y].PieceType == PieceType.None &&
+                                tempBoard.BoardPieces[piecePosition.X - 2, piecePosition.Y].PieceType == PieceType.None &&
+                                tempBoard.BoardPieces[piecePosition.X - 3, piecePosition.Y].PieceType == PieceType.None)
                             {
                                 //Cannot CASTLE through a CHECK position.
                                 bool canCastle = true;
                                 foreach (var oppMove in allOpponentMoves)
                                 {
-                                    if (oppMove.To.x == piecePosition.x - 1 &&
-                                        oppMove.To.y == piecePosition.y ||
-                                        oppMove.To.x == piecePosition.x - 2 &&
-                                        oppMove.To.y == piecePosition.y ||
-                                        oppMove.To.x == piecePosition.x - 3 &&
-                                        oppMove.To.y == piecePosition.y)
+                                    if (oppMove.To.X == piecePosition.X - 1 &&
+                                        oppMove.To.Y == piecePosition.Y ||
+                                        oppMove.To.X == piecePosition.X - 2 &&
+                                        oppMove.To.Y == piecePosition.Y ||
+                                        oppMove.To.X == piecePosition.X - 3 &&
+                                        oppMove.To.Y == piecePosition.Y)
                                     {
                                         canCastle = false;
                                     }
@@ -835,7 +835,7 @@ namespace ChessLogicSharp
                                 //Check if the final position is valid.
                                 if (canCastle)
                                 {
-                                    move = new BoardPieceMove(piecePosition.x, piecePosition.y, piecePosition.x - 2, piecePosition.y);
+                                    move = new BoardPieceMove(piecePosition.X, piecePosition.Y, piecePosition.X - 2, piecePosition.Y);
                                     CheckMoveValidityAndStoreMove(move, kingPiece.PieceOwner, tempBoard.BoardPieces, moves);
                                 }
                             }

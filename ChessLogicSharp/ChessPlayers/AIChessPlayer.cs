@@ -3,17 +3,18 @@ using ChessLogicSharp.DataStructures;
 
 namespace ChessLogicSharp.ChessPlayers
 {
+    /// <summary>
+    /// A example of an AI chess player. When it's its turn it creates a new thread and calculates the best move and then makes the move.
+    /// </summary>
     public class AIChessPlayer : ChessPlayer
     {
-        private BoardPieceMove _bestMove;
-        private bool _finishedCalculating;
-
         private readonly MinMaxMoveCalc _moveCalc;
     
         public AIChessPlayer(Board board, Player player, int searchDepth) : base(board, player)
         {
             _moveCalc = new MinMaxMoveCalc(searchDepth);
-            if (board.PlayerTurn == _player)
+            
+            if (board.PlayerTurn == Player)
             {
                 ThreadPool.QueueUserWorkItem((state) => CalculateAndMove());
             }
@@ -21,26 +22,15 @@ namespace ChessLogicSharp.ChessPlayers
 
         protected override void OnTurnSwapped(Player player)
         {
-            if (player == _player)
+            if (player == Player)
             {
                 ThreadPool.QueueUserWorkItem((state) => CalculateAndMove());
             }
         }
-
-        public override void Update(float deltaTime)
-        {
-            if (_finishedCalculating && _board.CanMove)
-            {
-                // Can only move piece on the unity main thread
-                MovePiece(_bestMove);
-                _finishedCalculating = false;
-            }
-        }
-
+        
         private void CalculateAndMove()
         {
-            _bestMove = _moveCalc.GetBestMove(_board);
-            _finishedCalculating = true;
+            MovePiece(_moveCalc.GetBestMove(Board));
         }
     }
 }

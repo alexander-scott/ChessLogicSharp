@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ChessLogicSharp;
+using ChessLogicSharp.ChessPlayers;
 using ChessLogicSharp.DataStructures;
 using NUnit.Framework;
 
@@ -45,12 +46,16 @@ namespace ChessLogicTests
         public void TurnSwapTest()
         {
             Board board = BoardFactory.CreateBoard();
+            BasicPlayer player1 = new BasicPlayer(board, Player.PlayerOne);
+            board.AddPlayer(player1);
+            BasicPlayer player2 = new BasicPlayer(board, Player.PlayerTwo);
+            board.AddPlayer(player2);
 
             Assert.IsTrue(board.PlayerTurn == Player.PlayerOne);
-            board.ApplyMove(3, 1, 3, 2);
+            player1.ApplyMove(3, 1, 3, 2);
 
             Assert.IsTrue(board.PlayerTurn == Player.PlayerTwo);
-            board.ApplyMove(3, 6, 3, 5);
+            player2.ApplyMove(3, 6, 3, 5);
 
             Assert.IsTrue(board.PlayerTurn == Player.PlayerOne);
         }
@@ -59,31 +64,36 @@ namespace ChessLogicTests
         public void ActionsRecordedTest()
         {
             Board board = BoardFactory.CreateBoard();
-            List<BoardAction> recordedActions = new List<BoardAction>();
-            board.OnBoardChanged += delegate(List<BoardAction> actions)
+            BasicPlayer player1 = new BasicPlayer(board, Player.PlayerOne);
+            board.AddPlayer(player1);
+            BasicPlayer player2 = new BasicPlayer(board, Player.PlayerTwo);
+            board.AddPlayer(player2);
+            
+            List<BoardChange> recordedActions = new List<BoardChange>();
+            board.OnBoardChanged += delegate(List<BoardChange> actions)
             {
                 for (int i = 0; i < actions.Count; i++)
                 {
                     recordedActions.Add(actions[i]);
                 }
             };
-            board.ApplyMove(3, 1, 3, 2);
-            board.ApplyMove(3, 6, 3, 5);
+            player1.ApplyMove(3, 1, 3, 2);
+            player2.ApplyMove(3, 6, 3, 5);
 
             Assert.AreEqual(2, recordedActions.Count);
             
             // First action
             Assert.AreEqual(Player.PlayerOne, recordedActions[0].Player);
-            Assert.AreEqual(BoardActionType.MovePiece, recordedActions[0].Type);
-            var action = (MovePieceAction) recordedActions[0];
+            Assert.AreEqual(BoardChangeType.MovePiece, recordedActions[0].Type);
+            var action = (MovePieceChange) recordedActions[0];
             Assert.AreEqual(PieceType.Pawn, action.MovedPieceType);
             Assert.AreEqual(new Vector2I(3,1), action.Move.From);
             Assert.AreEqual(new Vector2I(3,2), action.Move.To);
             
             // Second action
             Assert.AreEqual(Player.PlayerTwo, recordedActions[1].Player);
-            Assert.AreEqual(BoardActionType.MovePiece, recordedActions[1].Type);
-            action = (MovePieceAction) recordedActions[1];
+            Assert.AreEqual(BoardChangeType.MovePiece, recordedActions[1].Type);
+            action = (MovePieceChange) recordedActions[1];
             Assert.AreEqual(PieceType.Pawn, action.MovedPieceType);
             Assert.AreEqual(new Vector2I(3,6), action.Move.From);
             Assert.AreEqual(new Vector2I(3,5), action.Move.To);
@@ -106,6 +116,11 @@ namespace ChessLogicTests
             boardLayout = boardLayout.RotateArray();
             
             Board board = BoardFactory.CreateBoard(boardLayout);
+            BasicPlayer player1 = new BasicPlayer(board, Player.PlayerOne);
+            board.AddPlayer(player1);
+            BasicPlayer player2 = new BasicPlayer(board, Player.PlayerTwo);
+            board.AddPlayer(player2);
+            
             bool inCheck = false;
             Player playerInCheck = Player.None;
             board.OnPlayerInCheck += delegate(Player player)
@@ -115,13 +130,13 @@ namespace ChessLogicTests
             };
             
             Vector2I queenPos = new Vector2I(3, 0);
-            Assert.IsTrue(board.BoardPieces[queenPos.x, queenPos.y].PieceType == PieceType.Queen);
+            Assert.IsTrue(board.BoardPieces[queenPos.X, queenPos.Y].PieceType == PieceType.Queen);
             
             Vector2I queenDest = new Vector2I(7, 4);
-            Assert.IsTrue(board.BoardPieces[queenDest.x, queenDest.y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[queenDest.X, queenDest.Y].PieceType == PieceType.None);
             
             BoardPieceMove move = new BoardPieceMove(queenPos, queenDest);
-            board.ApplyMove(move);
+            player1.ApplyMove(move);
             
             Assert.IsTrue(inCheck);
             Assert.AreEqual(playerInCheck, Player.PlayerTwo);
@@ -144,6 +159,11 @@ namespace ChessLogicTests
             boardLayout = boardLayout.RotateArray();
             
             Board board = BoardFactory.CreateBoard(boardLayout);
+            BasicPlayer player1 = new BasicPlayer(board, Player.PlayerOne);
+            board.AddPlayer(player1);
+            BasicPlayer player2 = new BasicPlayer(board, Player.PlayerTwo);
+            board.AddPlayer(player2);
+            
             bool checkMate = false;
             Player winningPlayer = Player.None;
             board.OnGameStateChanged += delegate(GameState state)
@@ -156,13 +176,13 @@ namespace ChessLogicTests
             };
             
             Vector2I castlePos = new Vector2I(6, 0);
-            Assert.IsTrue(board.BoardPieces[castlePos.x, castlePos.y].PieceType == PieceType.Castle);
+            Assert.IsTrue(board.BoardPieces[castlePos.X, castlePos.Y].PieceType == PieceType.Castle);
             
             Vector2I castleDest = new Vector2I(6, 7);
-            Assert.IsTrue(board.BoardPieces[castleDest.x, castleDest.y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[castleDest.X, castleDest.Y].PieceType == PieceType.None);
             
             BoardPieceMove move = new BoardPieceMove(castlePos, castleDest);
-            board.ApplyMove(move);
+            player1.ApplyMove(move);
             
             Assert.IsTrue(checkMate);
             Assert.AreEqual(GameState.WonByCheckmate, board.GameState);

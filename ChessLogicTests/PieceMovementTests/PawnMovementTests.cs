@@ -1,4 +1,5 @@
 using ChessLogicSharp;
+using ChessLogicSharp.ChessPlayers;
 using ChessLogicSharp.DataStructures;
 using NUnit.Framework;
 
@@ -14,18 +15,22 @@ namespace ChessLogicTests.PieceMovementTests
         public void PawnMoveUpSinglePieceTest()
         {
             Board board = BoardFactory.CreateBoard();
+            BasicPlayer player1 = new BasicPlayer(board, Player.PlayerOne);
+            board.AddPlayer(player1);
+            BasicPlayer player2 = new BasicPlayer(board, Player.PlayerTwo);
+            board.AddPlayer(player2);
 
             Vector2I pawnPos = new Vector2I(3, 1);
-            Assert.IsTrue(board.BoardPieces[pawnPos.x, pawnPos.y].PieceType == PieceType.Pawn);
+            Assert.IsTrue(board.BoardPieces[pawnPos.X, pawnPos.Y].PieceType == PieceType.Pawn);
 
             Vector2I pawnDest = new Vector2I(3, 2);
-            Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[pawnDest.X, pawnDest.Y].PieceType == PieceType.None);
 
             BoardPieceMove move = new BoardPieceMove(pawnPos, pawnDest);
-            board.ApplyMove(move);
+            player1.ApplyMove(move);
 
-            Assert.IsTrue(board.BoardPieces[pawnPos.x, pawnPos.y].PieceType == PieceType.None);
-            Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.Pawn);
+            Assert.IsTrue(board.BoardPieces[pawnPos.X, pawnPos.Y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[pawnDest.X, pawnDest.Y].PieceType == PieceType.Pawn);
         }
 
         /// <summary>
@@ -35,18 +40,22 @@ namespace ChessLogicTests.PieceMovementTests
         public void PawnMoveUpDoublePieceTest()
         {
             Board board = BoardFactory.CreateBoard();
+            BasicPlayer player1 = new BasicPlayer(board, Player.PlayerOne);
+            board.AddPlayer(player1);
+            BasicPlayer player2 = new BasicPlayer(board, Player.PlayerTwo);
+            board.AddPlayer(player2);
 
             Vector2I pawnPos = new Vector2I(3, 1);
-            Assert.IsTrue(board.BoardPieces[pawnPos.x, pawnPos.y].PieceType == PieceType.Pawn);
+            Assert.IsTrue(board.BoardPieces[pawnPos.X, pawnPos.Y].PieceType == PieceType.Pawn);
 
             Vector2I pawnDest = new Vector2I(3, 3);
-            Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[pawnDest.X, pawnDest.Y].PieceType == PieceType.None);
 
             BoardPieceMove move = new BoardPieceMove(pawnPos, pawnDest);
-            board.ApplyMove(move);
+            player1.ApplyMove(move);
 
-            Assert.IsTrue(board.BoardPieces[pawnPos.x, pawnPos.y].PieceType == PieceType.None);
-            Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.Pawn);
+            Assert.IsTrue(board.BoardPieces[pawnPos.X, pawnPos.Y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[pawnDest.X, pawnDest.Y].PieceType == PieceType.Pawn);
         }
 
         /// <summary>
@@ -56,18 +65,22 @@ namespace ChessLogicTests.PieceMovementTests
         public void PawnInvalidMovePieceTest()
         {
             Board board = BoardFactory.CreateBoard();
+            BasicPlayer player1 = new BasicPlayer(board, Player.PlayerOne);
+            board.AddPlayer(player1);
+            BasicPlayer player2 = new BasicPlayer(board, Player.PlayerTwo);
+            board.AddPlayer(player2);
 
             Vector2I pawnPos = new Vector2I(3, 1);
-            Assert.IsTrue(board.BoardPieces[pawnPos.x, pawnPos.y].PieceType == PieceType.Pawn);
+            Assert.IsTrue(board.BoardPieces[pawnPos.X, pawnPos.Y].PieceType == PieceType.Pawn);
 
             Vector2I pawnDest = new Vector2I(3, 4);
-            Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[pawnDest.X, pawnDest.Y].PieceType == PieceType.None);
 
             BoardPieceMove move = new BoardPieceMove(pawnPos, pawnDest);
-            Assert.IsFalse(board.ApplyMove(move));
+            Assert.IsFalse(player1.ApplyMove(move));
 
-            Assert.IsTrue(board.BoardPieces[pawnPos.x, pawnPos.y].PieceType == PieceType.Pawn);
-            Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[pawnPos.X, pawnPos.Y].PieceType == PieceType.Pawn);
+            Assert.IsTrue(board.BoardPieces[pawnDest.X, pawnDest.Y].PieceType == PieceType.None);
         }
 
         /// <summary>
@@ -90,17 +103,22 @@ namespace ChessLogicTests.PieceMovementTests
             boardLayout = boardLayout.RotateArray();
 
             Board board = BoardFactory.CreateBoard(boardLayout);
+            BasicPlayer player1 = new BasicPlayer(board, Player.PlayerOne);
+            board.AddPlayer(player1);
+            BasicPlayer player2 = new BasicPlayer(board, Player.PlayerTwo);
+            board.AddPlayer(player2);
+            
             var pawnPos = new Vector2I(3, 2);
-            Assert.IsTrue(board.BoardPieces[pawnPos.x, pawnPos.y].PieceType == PieceType.Pawn);
+            Assert.IsTrue(board.BoardPieces[pawnPos.X, pawnPos.Y].PieceType == PieceType.Pawn);
 
             var pawnDest = new Vector2I(3, 4);
-            Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[pawnDest.X, pawnDest.Y].PieceType == PieceType.None);
 
             var move = new BoardPieceMove(pawnPos, pawnDest);
-            Assert.IsFalse(board.ApplyMove(move));
+            Assert.IsFalse(player1.ApplyMove(move));
 
-            Assert.IsTrue(board.BoardPieces[pawnPos.x, pawnPos.y].PieceType == PieceType.Pawn);
-            Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[pawnPos.X, pawnPos.Y].PieceType == PieceType.Pawn);
+            Assert.IsTrue(board.BoardPieces[pawnDest.X, pawnDest.Y].PieceType == PieceType.None);
         }
         
         /// <summary>
@@ -123,17 +141,22 @@ namespace ChessLogicTests.PieceMovementTests
             boardLayout = boardLayout.RotateArray();
 
             Board board = BoardFactory.CreateBoard(boardLayout);
+            BasicPlayer player1 = new BasicPlayer(board, Player.PlayerOne);
+            board.AddPlayer(player1);
+            BasicPlayer player2 = new BasicPlayer(board, Player.PlayerTwo);
+            board.AddPlayer(player2);
+            
             var pawnPos = new Vector2I(3, 4);
-            Assert.IsTrue(board.BoardPieces[pawnPos.x, pawnPos.y].PieceType == PieceType.Pawn);
+            Assert.IsTrue(board.BoardPieces[pawnPos.X, pawnPos.Y].PieceType == PieceType.Pawn);
 
             var pawnDest = new Vector2I(3, 3);
-            Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[pawnDest.X, pawnDest.Y].PieceType == PieceType.None);
 
             var move = new BoardPieceMove(pawnPos, pawnDest);
-            Assert.IsFalse(board.ApplyMove(move));
+            Assert.IsFalse(player1.ApplyMove(move));
 
-            Assert.IsTrue(board.BoardPieces[pawnPos.x, pawnPos.y].PieceType == PieceType.Pawn);
-            Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[pawnPos.X, pawnPos.Y].PieceType == PieceType.Pawn);
+            Assert.IsTrue(board.BoardPieces[pawnDest.X, pawnDest.Y].PieceType == PieceType.None);
         }
 
         [Test]
@@ -153,20 +176,25 @@ namespace ChessLogicTests.PieceMovementTests
             boardLayout = boardLayout.RotateArray();
 
             Board board = BoardFactory.CreateBoard(boardLayout);
+            BasicPlayer player1 = new BasicPlayer(board, Player.PlayerOne);
+            board.AddPlayer(player1);
+            BasicPlayer player2 = new BasicPlayer(board, Player.PlayerTwo);
+            board.AddPlayer(player2);
+            
             board.PlayerTurn = Player.PlayerTwo;
             
             var pawnPos = new Vector2I(4, 6); // Move enemy pawn
             var pawnDest = new Vector2I(4, 4);
             var move = new BoardPieceMove(pawnPos, pawnDest);
-            board.ApplyMove(move);
+            player2.ApplyMove(move);
             
             pawnPos = new Vector2I(3, 4); // En passant take
             pawnDest = new Vector2I(4, 5);
             move = new BoardPieceMove(pawnPos, pawnDest);
-            board.ApplyMove(move);
+            player1.ApplyMove(move);
 
-            Assert.IsTrue(board.BoardPieces[pawnPos.x, pawnPos.y].PieceType == PieceType.None);
-            Assert.IsTrue(board.BoardPieces[pawnDest.x, pawnDest.y].PieceType == PieceType.Pawn && board.BoardPieces[pawnDest.x, pawnDest.y].PieceOwner == Player.PlayerOne);
+            Assert.IsTrue(board.BoardPieces[pawnPos.X, pawnPos.Y].PieceType == PieceType.None);
+            Assert.IsTrue(board.BoardPieces[pawnDest.X, pawnDest.Y].PieceType == PieceType.Pawn && board.BoardPieces[pawnDest.X, pawnDest.Y].PieceOwner == Player.PlayerOne);
             Assert.IsTrue(board.BoardPieces[4, 4].PieceType == PieceType.None);
         }
     }
